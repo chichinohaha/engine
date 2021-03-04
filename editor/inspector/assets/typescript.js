@@ -20,6 +20,9 @@ exports.$ = {
 let panel;
 
 exports.style = `
+[hidden] {
+    display: none;
+}
 .asset-javascript {
     flex: 1;
     display: flex;
@@ -64,6 +67,7 @@ exports.style = `
  */
 exports.update = function (assetList, metaList) {
     if (assetList.length === 1) {
+        panel.$.code.hidden = false;
         const info = assetList[0];
         if (info.importer !== 'typescript') {
             return;
@@ -99,6 +103,7 @@ exports.update = function (assetList, metaList) {
         });
     } else {
         panel.$.code.innerText = '';
+        panel.$.code.hidden = true;
     }
 };
 
