@@ -5,4 +5,6 @@ const { join } = require('path');
 module.exports = {
     'scene': join(__dirname, './assets/scene.js'),
     'material': join(__dirname, './assets/material.js'),
+    typescript: join(__dirname, './assets/typescript.js'),
+
 };
