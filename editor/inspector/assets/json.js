@@ -1,4 +1,3 @@
-@@ -0,0 +1,110 @@
 const { createReadStream } = require('fs-extra');
 const ReadLine = require('readline');
 
@@ -21,6 +20,9 @@ exports.$ = {
 let panel;
 
 exports.style = `
+[hidden] {
+    display: none;
+}
 .asset-javascript {
     flex: 1;
     display: flex;
@@ -66,6 +68,7 @@ exports.style = `
 exports.update = function (assetList, metaList) {
     if (assetList.length === 1) {
         const info = assetList[0];
+        panel.$.code.hidden = false;
         if (info.importer !== 'json') {
             return;
         }
@@ -100,6 +103,7 @@ exports.update = function (assetList, metaList) {
         });
     } else {
         panel.$.code.innerText = '';
+        panel.$.code.hidden = true;
     }
 };
 
