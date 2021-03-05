@@ -79,7 +79,6 @@ exports.update = function (assetList, metaList) {
         let text = '';
         const readLineStream = ReadLine.createInterface({ input: readStream, setEncoding: 'utf-8' });
         readLineStream.on('line', (line) => {
-            line = line.replace(/<br>/g, '');
             const lineLength = line.length;
             if (lineLength > remainLength) {
                 line = line.substr(0, remainLength);
