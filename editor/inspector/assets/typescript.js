@@ -63,7 +63,7 @@ exports.style = `
 }
 `;
 /**
- * 自动渲染组件的方法
+ * Methods to automatically render components
  */
 exports.update = function (assetList, metaList) {
     if (assetList.length === 1) {
@@ -73,7 +73,7 @@ exports.update = function (assetList, metaList) {
             return;
         }
         const readStream = createReadStream(info.file, { encoding: 'utf-8' });
-        // 显示 400 行或者 20000 个字符
+        // Displays 400 lines or 20,000 characters
         let remainLines = MAX_LINES;
         let remainLength = MAX_LENGTH;
         let text = '';
@@ -108,7 +108,7 @@ exports.update = function (assetList, metaList) {
 };
 
 /**
- * 初始化界面的方法
+ * A method to initialize the panel
  */
 exports.ready = function () {
     panel = this;
