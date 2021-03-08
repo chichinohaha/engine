@@ -9,4 +9,5 @@ module.exports = {
     'sprite-frame': join(__dirname, './assets/sprite-frame.js'),
     'texture': join(__dirname, './assets/texture.js'),
     'material': join(__dirname, './assets/material.js'),
+    'javascript': join(__dirname, './assets/javascript.js'),
 };
