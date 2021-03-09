@@ -20,7 +20,7 @@ exports.$ = {
 let panel;
 
 exports.style = `
-[hidden] {
+:host > .asset-javascript > ui-code[hidden] {
     display: none;
 }
 .asset-javascript {
