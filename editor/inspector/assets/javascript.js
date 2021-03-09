@@ -1,4 +1,3 @@
-const { debug } = require('console');
 const { createReadStream } = require('fs-extra');
 const ReadLine = require('readline');
 
@@ -12,7 +11,7 @@ let simulateGlobalsInput;
 let dependenciesNumInput;
 let dependenciesContent;
 let pluginOperations;
-let content;
+let advancedSection;
 let metas;
 let meta;
 const MAX_LINES = 400;
@@ -21,6 +20,7 @@ const MAX_LENGTH = 20000;
 function t (key) {
     return Editor.I18n.t(`inspector.asset.javascript.${key}`);
 }
+
 /**
    * Checks whether a data is invalid in the multiple - selected state
    * @param key string
@@ -29,6 +29,12 @@ function getInvalid (key) {
     const source = metas[0].userData[key];
     return !metas.every((meta) => source === meta.userData[key]);
 }
+
+/**
+ * Modify the length of the dependent script
+ * @param param number|event
+ * @returns void
+ */
 function _onChangeDependenciesLength (param) {
     const childNodes = dependenciesContent.children;
 
@@ -67,6 +73,7 @@ function _onChangeDependenciesLength (param) {
             dependenciesContent.appendChild(child);
         } else {
             element.value = value;
+            element.setAttribute('index', index.toString());
         }
     }
     if (childNodes.length > length) {
@@ -78,6 +85,15 @@ function _onChangeDependenciesLength (param) {
         needlessNodes.forEach((node) => { dependenciesContent.removeChild(node); });
     }
 }
+
+function updateSimulateGlobalsNamesInput () {
+    const isHidden = !meta.userData.simulateGlobals;
+    simulateGlobalsInput.style = isHidden ? 'display:none' : '';
+    simulateGlobalsInput.value = Array.isArray(meta.userData.simulateGlobals) ? meta.userData.simulateGlobals.join(';') : '';
+}
+function updatePluginOperations () {
+    pluginOperations.forEach((element) => { element.hidden = !meta.userData.isPlugin || getInvalid('isPlugin'); });
+}
 exports.template = `
 <section class="asset-javascript">
 
@@ -85,14 +101,13 @@ exports.template = `
         <ui-label 
             i18n
             slot="label"
-
         >
         inspector.asset.javascript.plugin</ui-label>
         <ui-checkbox 
             class="content"
             id="is-plugin"
             slot="content"
-            :invalid="getInvalid('isPlugin')"
+        
          ></ui-checkbox>
     </ui-prop>
 
@@ -102,7 +117,7 @@ exports.template = `
         <ui-prop class="line indent">
             <ui-label
                 slot="label"
-            >Dependencies</ui-label>
+            >inspector.asset.javascript.dependencies</ui-label>
             <ui-num-input class="content" 
                 step="1" 
                 min="0" 
@@ -122,23 +137,27 @@ exports.template = `
 
         <div class="line indent">
             <ui-section class="content"
-                id="content"
+                id="advanced-section"
                 expand
                 expand-key="advanced"
             >
                 <ui-prop class="line">
-                    <ui-label i18n>   
-                        inspector.asset.javascript.simulateGlobals
+                    <ui-label i18n
                         slot="label"
+                    >   
+                        inspector.asset.javascript.simulateGlobals                        
                     </ui-label>
-                    <ui-checkbox
-                        id="simulate-globals-enabled"
+                    <span
                         slot="content"
-                    ></ui-checkbox>
-                    <ui-input placeholder='self;window;global;globalThis'
-                        id="simulate-globals-input"
-                        hidden
-                    ></ui-input>
+                    >
+                        <ui-checkbox
+                            id="simulate-globals-enabled"
+                        ></ui-checkbox>
+                        <ui-input placeholder='self;window;global;globalThis'
+                            id="simulate-globals-input"
+                            hidden
+                        ></ui-input>
+                    </span>
                 </ui-prop>
             </ui-section>
         </div>
@@ -147,21 +166,40 @@ exports.template = `
     <div
         class="child plugin-operation"
     >
-        <div class="line">
+        <ui-prop class="line">
+            <ui-label i18n
+                slot="label"
+            >
+            inspector.asset.javascript.loadPluginInWeb
+            </ui-label>
             <ui-checkbox
                 id="load-plugin-in-web"
+                slot="content"
             ></ui-checkbox>
-        </div>
-        <div class="line">
+        </ui-prop>
+        <ui-prop class="line"
+        >
+            <ui-label i18n
+                slot="label"
+            >
+            inspector.asset.javascript.loadPluginInNative
+            </ui-label>
             <ui-checkbox
+                slot="content"
                 id="load-plugin-in-native"
             ></ui-checkbox>
-        </div>
-        <div class="line">
+        </ui-prop>
+        <ui-prop class="line">
+            <ui-label i18n
+                slot="label"
+            >
+            inspector.asset.javascript.loadPluginInEditor
+            </ui-label>
             <ui-checkbox
+                slot="content"
                 id="load-plugin-in-editor"
             ></ui-checkbox>
-        </div>
+        </ui-prop>
     </div>
 
     <ui-code 
@@ -182,7 +220,7 @@ exports.$ = {
     'load-plugin-in-native': '#load-plugin-in-native',
     dependencies: '#dependencies',
     dependenciesContent: '#dependencies-content',
-    content: '#content',
+    'advanced-section': '#advanced-section',
     'simulate-globals-enabled': '#simulate-globals-enabled',
     'simulate-globals-input': '#simulate-globals-input',
     'dependencies-content': '#dependencies-content',
@@ -190,7 +228,7 @@ exports.$ = {
 };
 
 exports.style = `
-:host[hidden] {
+:host > .asset-javascript > ui-code[hidden] {
     display: none;
 }
 .asset-javascript {
@@ -199,17 +237,7 @@ exports.style = `
     flex-direction: column;
     overflow: auto;
 }
-.asset-javascript .line {
-    display: flex;
-    margin-bottom: 6px;
-}
-.asset-javascript .line > ui-label {
-    display: inline-block;
-    width: 150px;
-}
-.asset-javascript .line > .content {
-    flex: 1;
-}
+
 .asset-javascript .indent {
     padding-left: 20px;
 }
@@ -237,22 +265,27 @@ exports.style = `
  * Methods to automatically render components
  */
 exports.update = function (assetList, metaList) {
+    if (metas === metaList) {
+        return;
+    }
     metas = metaList;
     meta = metas[0];
+
+    isPluginCheckBox.invalid = getInvalid('isPlugin');
     isSimulateGlobalsEnabledCheckBox.value = !!meta.userData.simulateGlobals;
-    simulateGlobalsInput.hidden = !meta.userData.simulateGlobals;
-    simulateGlobalsInput.value = Array.isArray(meta.userData.simulateGlobals) ? meta.userData.simulateGlobals.join(';') : '';
+
     loadPluginInWebCheckBox.value = meta && meta.userData.loadPluginInWeb;
     loadPluginInWebCheckBox.invalid = getInvalid('loadPluginInWeb');
-    loadPluginInWebCheckBox.innerText = t('loadPluginInWeb');
+
     loadPluginInNativeCheckBox.value = meta && meta.userData.loadPluginInNative;
     loadPluginInNativeCheckBox.invalid = getInvalid('loadPluginInNative');
-    loadPluginInNativeCheckBox.innerText = t('loadPluginInNative');
+
     loadPluginInEditorCheckBox.value = meta && meta.userData.loadPluginInEditor;
     loadPluginInEditorCheckBox.invalid = getInvalid('loadPluginInEditor');
-    loadPluginInEditorCheckBox.innerText = t('loadPluginInEditor');
+
+    updateSimulateGlobalsNamesInput();
     dependenciesNumInput.value = meta.userData.dependencies ? meta.userData.dependencies.length : 0;
-    pluginOperations.forEach((element) => { element.hidden = !meta.userData.isPlugin || getInvalid('isPlugin'); });
+    updatePluginOperations();
     _onChangeDependenciesLength(meta.userData.dependencies ? meta.userData.dependencies.length : 0);
     if (metaList.length) {
         const meta = metaList[0];
@@ -325,13 +358,14 @@ exports.ready = function () {
                 }
             }
         });
-        pluginOperations.forEach((element) => { element.hidden = !meta.userData.isPlugin || getInvalid('isPlugin'); });
+        updatePluginOperations();
         panel.dispatch('change');
     }
 
     function onSimulateGlobalsStateChanged (event) {
         metas.forEach((meta) => { meta.userData.simulateGlobals = event.target.value; });
         panel.dispatch('change');
+        updateSimulateGlobalsNamesInput();
     }
     function onSimulateGlobalsListChanged (event) {
         const value = event.target.value;
@@ -363,8 +397,8 @@ exports.ready = function () {
     dependenciesNumInput = panel.$.dependencies;
     dependenciesNumInput.addEventListener('confirm', _onChangeDependenciesLength);
 
-    content = panel.$.content;
-    content.setAttribute('header', t('advanced'));
+    advancedSection = panel.$['advanced-section'];
+    advancedSection.setAttribute('header', t('advanced'));
 
     isSimulateGlobalsEnabledCheckBox = panel.$['simulate-globals-enabled'];
     isSimulateGlobalsEnabledCheckBox.addEventListener('confirm', onSimulateGlobalsStateChanged);
