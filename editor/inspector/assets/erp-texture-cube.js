@@ -203,8 +203,7 @@ const uiElements = {
     },
     lockIcons: {
         ready () {
-            this.lockIcons = [];
-            this.$this.shadowRoot.querySelectorAll('ui-prop').forEach((uiProp) => { this.lockIcons.push(uiProp.querySelector('ui-icon')); });
+            this.lockIcons = this.$this.shadowRoot.querySelectorAll('ui-icon');
         },
         update () {
             this.lockIcons.forEach((icon) => {
