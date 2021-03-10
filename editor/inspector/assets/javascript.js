@@ -1,19 +1,6 @@
 const { createReadStream } = require('fs-extra');
 const ReadLine = require('readline');
 
-let panel;
-let isPluginCheckBox;
-let loadPluginInWebCheckBox;
-let loadPluginInNativeCheckBox;
-let loadPluginInEditorCheckBox;
-let isSimulateGlobalsEnabledCheckBox;
-let simulateGlobalsInput;
-let dependenciesNumInput;
-let dependenciesContent;
-let pluginOperations;
-let advancedSection;
-let metas;
-let meta;
 const MAX_LINES = 400;
 const MAX_LENGTH = 20000;
 
@@ -21,79 +8,6 @@ function t (key) {
     return Editor.I18n.t(`inspector.asset.javascript.${key}`);
 }
 
-/**
-   * Checks whether a data is invalid in the multiple - selected state
-   * @param key string
-   */
-function getInvalid (key) {
-    const source = metas[0].userData[key];
-    return !metas.every((meta) => source === meta.userData[key]);
-}
-
-/**
- * Modify the length of the dependent script
- * @param param number|event
- * @returns void
- */
-function _onChangeDependenciesLength (param) {
-    const childNodes = dependenciesContent.children;
-
-    const length = typeof param === 'number' ? param : Number(param.target.value);
-    panel.dispatch('change');
-    function onDependenciesChange (event) {
-        const value = event.target.value;
-        this.value = value;
-        meta.userData.dependencies[this.getAttribute('index')] = value;
-        panel.dispatch('change');
-    }
-
-    if (!Array.isArray(meta.userData.dependencies)) {
-        meta.userData.dependencies = [];
-    }
-
-    if (length < 0 || length > 10) {
-        return;
-    }
-    while (meta.userData.dependencies.length < length) {
-        meta.userData.dependencies.push('');
-    }
-
-    while (meta.userData.dependencies.length > length) {
-        meta.userData.dependencies.pop();
-    }
-    for (let index = 0; index < length; index++) {
-        const element = childNodes[index];
-        const value = meta.userData.dependencies[index];
-        if (!element) {
-            const child = document.createElement('ui-asset');
-            child.setAttribute('index', index.toString());
-            child.setAttribute('value', value);
-            child.setAttribute('droppable', 'cc.Script');
-            child.addEventListener('confirm', onDependenciesChange.bind(child));
-            dependenciesContent.appendChild(child);
-        } else {
-            element.value = value;
-            element.setAttribute('index', index.toString());
-        }
-    }
-    if (childNodes.length > length) {
-        const needlessNodes = [];
-        for (let index = childNodes.length - 1; index > length - 1; index--) {
-            const element = childNodes[index];
-            needlessNodes.push(element);
-        }
-        needlessNodes.forEach((node) => { dependenciesContent.removeChild(node); });
-    }
-}
-
-function updateSimulateGlobalsNamesInput () {
-    const isHidden = !meta.userData.simulateGlobals;
-    simulateGlobalsInput.style = isHidden ? 'display:none' : '';
-    simulateGlobalsInput.value = Array.isArray(meta.userData.simulateGlobals) ? meta.userData.simulateGlobals.join(';') : '';
-}
-function updatePluginOperations () {
-    pluginOperations.forEach((element) => { element.hidden = !meta.userData.isPlugin || getInvalid('isPlugin'); });
-}
 exports.template = `
 <section class="asset-javascript">
 
@@ -260,75 +174,172 @@ exports.style = `
     cursor: auto;
 }
 `;
+const uiElements = {
+    isPluginCheckBox: {
+        ready () {
+            this.isPluginCheckBox = this.$['is-plugin'];
+            this.isPluginCheckBox.addEventListener('confirm', this._onPluginStateChanged.bind(this, 'isPlugin'));
+        },
+        update () {
+            this.isPluginCheckBox.invalid = this.getInvalid('isPlugin');
+            this.isPluginCheckBox.value = this.meta.userData.isPlugin;
+        },
+    },
+    isSimulateGlobalsEnabledCheckBox: {
+        ready () {
+            this.isSimulateGlobalsEnabledCheckBox = this.$['simulate-globals-enabled'];
+            this.isSimulateGlobalsEnabledCheckBox.addEventListener('confirm', this.onSimulateGlobalsStateChanged);
+        },
+        update () {
+            this.isSimulateGlobalsEnabledCheckBox.value = !!this.meta.userData.simulateGlobals;
+        },
+    },
+    loadPluginInWebCheckBox: {
+        ready () {
+            this.loadPluginInWebCheckBox = this.$['load-plugin-in-web'];
+            this.loadPluginInWebCheckBox.addEventListener('confirm', this._onPluginStateChanged.bind(this, 'loadPluginInWeb'));
+        },
+        update () {
+            this.loadPluginInWebCheckBox.value = this.meta && this.meta.userData.loadPluginInWeb;
+            this.loadPluginInWebCheckBox.invalid = this.getInvalid('loadPluginInWeb');
+        },
+    },
+    loadPluginInNativeCheckBox: {
+        ready () {
+            this.loadPluginInNativeCheckBox = this.$['load-plugin-in-native'];
+            this.loadPluginInNativeCheckBox.addEventListener('confirm', this._onPluginStateChanged.bind(this, 'loadPluginInNative'));
+        },
+        update () {
+            this.loadPluginInNativeCheckBox.value = this.meta && this.meta.userData.loadPluginInNative;
+            this.loadPluginInNativeCheckBox.invalid = this.getInvalid('loadPluginInNative');
+        },
+    },
+    loadPluginInEditorCheckBox: {
+        ready () {
+            this.loadPluginInEditorCheckBox = this.$['load-plugin-in-editor'];
+            this.loadPluginInEditorCheckBox.addEventListener('confirm', this._onPluginStateChanged.bind(this, 'loadPluginInEditor'));
+        },
+        update () {
+            this.loadPluginInEditorCheckBox.value = this.meta && this.meta.userData.loadPluginInEditor;
+            this.loadPluginInEditorCheckBox.invalid = this.getInvalid('loadPluginInEditor');
+        },
+    },
+    simulateGlobalsInput: {
+        ready () {
+            const metas = this.metas;
+            function onSimulateGlobalsListChanged (event) {
+                const value = event.target.value;
+                if (typeof value === 'string') {
+                    let globalNames = [];
+                    if (value.length !== 0) {
+                        globalNames = value.split(';')
+                            .map((globalName) => globalName.trim())
+                            .filter((globalName) => globalName.length !== 0);
+                    }
+                    metas.forEach((meta) => meta.userData.simulateGlobals = globalNames.length === 0 ? true : globalNames);
+                    this.dispatch('change');
+                }
+            }
+            this.simulateGlobalsInput = this.$['simulate-globals-input'];
+            this.simulateGlobalsInput.addEventListener('confirm', onSimulateGlobalsListChanged);
+        },
+        update () {
+            this.updateSimulateGlobalsNamesInput();
+        },
+    },
+    dependenciesContent: {
+        ready () {
+            this.dependenciesContent = this.$.dependenciesContent;
+        },
+        update () {
+            this._onChangeDependenciesLength(this.meta.userData.dependencies ? this.meta.userData.dependencies.length : 0);
+        },
+    },
+    dependenciesNumInput: {
+        ready () {
+            this.dependenciesNumInput = this.$.dependencies;
+            this.dependenciesNumInput.addEventListener('confirm', this._onChangeDependenciesLength);
+        },
+        update () {
+            this.dependenciesNumInput.value = this.meta.userData.dependencies ? this.meta.userData.dependencies.length : 0;
+        },
+    },
+    advancedSection: {
+        ready () {
+            this.advancedSection = this.$['advanced-section'];
+            this.advancedSection.setAttribute('header', t('advanced'));
+        },
+        update () {
 
+        },
+    },
+    pluginOperations: {
+        ready () {
+            this.pluginOperations = this.$this.shadowRoot.querySelectorAll('.plugin-operation');
+        },
+        update () {
+            this.updatePluginOperations();
+        },
+    },
+    code: {
+        ready () {
+
+        },
+        update () {
+            if (this.assetInfos.length === 1) {
+                const info = this.assetInfo;
+                this.$.code.hidden = false;
+                if (info.importer !== 'javascript') {
+                    return;
+                }
+                const readStream = createReadStream(info.file, { encoding: 'utf-8' });
+                // Displays 400 lines or 20,000 characters
+                let remainLines = MAX_LINES;
+                let remainLength = MAX_LENGTH;
+                let text = '';
+                const readLineStream = ReadLine.createInterface({ input: readStream, setEncoding: 'utf-8' });
+                readLineStream.on('line', (line) => {
+                    const lineLength = line.length;
+                    if (lineLength > remainLength) {
+                        line = line.substr(0, remainLength);
+                        remainLength = 0;
+                    } else {
+                        remainLength -= lineLength;
+                    }
+
+                    remainLines--;
+                    text += `${line}\n`;
+
+                    if (remainLines <= 0 || remainLength <= 0) {
+                        text += '...\n';
+                    }
+                });
+                readLineStream.on('close', (err) => {
+                    if (err) {
+                        throw err;
+                    }
+                    this.$.code.innerHTML = text;
+                });
+            } else {
+                this.$.code.innerText = '';
+                this.$.code.hidden = true;
+            }
+        },
+    },
+};
 /**
  * Methods to automatically render components
  */
 exports.update = function (assetList, metaList) {
-    if (metas === metaList) {
+    if (this.metas === metaList) {
         return;
     }
-    metas = metaList;
-    meta = metas[0];
-
-    isPluginCheckBox.invalid = getInvalid('isPlugin');
-    isSimulateGlobalsEnabledCheckBox.value = !!meta.userData.simulateGlobals;
-
-    loadPluginInWebCheckBox.value = meta && meta.userData.loadPluginInWeb;
-    loadPluginInWebCheckBox.invalid = getInvalid('loadPluginInWeb');
-
-    loadPluginInNativeCheckBox.value = meta && meta.userData.loadPluginInNative;
-    loadPluginInNativeCheckBox.invalid = getInvalid('loadPluginInNative');
-
-    loadPluginInEditorCheckBox.value = meta && meta.userData.loadPluginInEditor;
-    loadPluginInEditorCheckBox.invalid = getInvalid('loadPluginInEditor');
-
-    updateSimulateGlobalsNamesInput();
-    dependenciesNumInput.value = meta.userData.dependencies ? meta.userData.dependencies.length : 0;
-    updatePluginOperations();
-    _onChangeDependenciesLength(meta.userData.dependencies ? meta.userData.dependencies.length : 0);
-    if (metaList.length) {
-        const meta = metaList[0];
-        const isPlugin = meta.userData.isPlugin;
-        isPluginCheckBox.value = isPlugin;
-    }
-    if (assetList.length === 1) {
-        const info = assetList[0];
-        panel.$.code.hidden = false;
-        if (info.importer !== 'javascript') {
-            return;
-        }
-        const readStream = createReadStream(info.file, { encoding: 'utf-8' });
-        // Displays 400 lines or 20,000 characters
-        let remainLines = MAX_LINES;
-        let remainLength = MAX_LENGTH;
-        let text = '';
-        const readLineStream = ReadLine.createInterface({ input: readStream, setEncoding: 'utf-8' });
-        readLineStream.on('line', (line) => {
-            const lineLength = line.length;
-            if (lineLength > remainLength) {
-                line = line.substr(0, remainLength);
-                remainLength = 0;
-            } else {
-                remainLength -= lineLength;
-            }
-
-            remainLines--;
-            text += `${line}\n`;
-
-            if (remainLines <= 0 || remainLength <= 0) {
-                text += '...\n';
-            }
-        });
-        readLineStream.on('close', (err) => {
-            if (err) {
-                throw err;
-            }
-            panel.$.code.innerHTML = text;
-        });
-    } else {
-        panel.$.code.innerText = '';
-        panel.$.code.hidden = true;
+    this.metas = metaList;
+    this.meta = this.metas[0];
+    this.assetInfos = assetList;
+    this.assetInfo = assetList[0];
+    for (const key in uiElements) {
+        uiElements[key].update.call(this);
     }
 };
 
@@ -336,15 +347,35 @@ exports.update = function (assetList, metaList) {
  * A method to initialize the panel
  */
 exports.ready = function () {
-    panel = this;
+    for (const key in uiElements) {
+        uiElements[key].ready.call(this);
+    }
+};
+
+exports.methods = {
+    onSimulateGlobalsStateChanged (event) {
+        const metas = this.metas;
+        metas.forEach((meta) => { meta.userData.simulateGlobals = event.target.value; });
+        this.dispatch('change');
+        this.updateSimulateGlobalsNamesInput();
+    },
     /**
-     *
-     * @param key key of userData
-     * @param event document event
-     */
-    function _onPluginStateChanged (key, event) {
+   * Checks whether a data is invalid in the multiple - selected state
+   * @param key string
+   */
+    getInvalid (key) {
+        const metas = this.metas;
+        const source = metas[0].userData[key];
+        return !metas.every((meta) => source === meta.userData[key]);
+    },
+    /**
+    *
+    * @param key key of userData
+    * @param event document event
+    */
+    _onPluginStateChanged (key, event) {
         const value = event.target.value;
-        metas.forEach((meta) => {
+        this.metas.forEach((meta) => {
             meta.userData[key] = value;
             if (key === 'isPlugin' && value) {
                 if (!('loadPluginInWeb' in meta.userData)) {
@@ -358,53 +389,75 @@ exports.ready = function () {
                 }
             }
         });
-        updatePluginOperations();
-        panel.dispatch('change');
-    }
-
-    function onSimulateGlobalsStateChanged (event) {
-        metas.forEach((meta) => { meta.userData.simulateGlobals = event.target.value; });
-        panel.dispatch('change');
-        updateSimulateGlobalsNamesInput();
-    }
-    function onSimulateGlobalsListChanged (event) {
-        const value = event.target.value;
-        if (typeof value === 'string') {
-            let globalNames = [];
-            if (value.length !== 0) {
-                globalNames = value.split(';')
-                    .map((globalName) => globalName.trim())
-                    .filter((globalName) => globalName.length !== 0);
-            }
-            metas.forEach((meta) => meta.userData.simulateGlobals = globalNames.length === 0 ? true : globalNames);
-            panel.dispatch('change');
+        this.updatePluginOperations();
+        this.dispatch('change');
+    },
+    /**
+    * Modify the length of the dependent script
+    * @param param number|event
+    * @returns void
+    */
+    _onChangeDependenciesLength (param) {
+        const dependenciesContent = this.dependenciesContent;
+        const childNodes = dependenciesContent.children;
+        const meta = this.meta;
+        const length = typeof param === 'number' ? param : Number(param.target.value);
+        this.dispatch('change');
+        function onDependenciesChange (event) {
+            const value = event.target.value;
+            this.value = value;
+            meta.userData.dependencies[this.getAttribute('index')] = value;
+            this.dispatch('change');
         }
-    }
-    isPluginCheckBox = panel.$['is-plugin'];
-    isPluginCheckBox.addEventListener('confirm', _onPluginStateChanged.bind(isPluginCheckBox, 'isPlugin'));
 
-    loadPluginInEditorCheckBox = panel.$['load-plugin-in-editor'];
-    loadPluginInEditorCheckBox.addEventListener('confirm', _onPluginStateChanged.bind(loadPluginInEditorCheckBox, 'loadPluginInEditor'));
+        if (!Array.isArray(meta.userData.dependencies)) {
+            meta.userData.dependencies = [];
+        }
 
-    loadPluginInNativeCheckBox = panel.$['load-plugin-in-native'];
-    loadPluginInNativeCheckBox.addEventListener('confirm', _onPluginStateChanged.bind(loadPluginInNativeCheckBox, 'loadPluginInNative'));
+        if (length < 0 || length > 10) {
+            return;
+        }
+        while (meta.userData.dependencies.length < length) {
+            meta.userData.dependencies.push('');
+        }
 
-    loadPluginInWebCheckBox = panel.$['load-plugin-in-web'];
-    loadPluginInWebCheckBox.addEventListener('confirm', _onPluginStateChanged.bind(loadPluginInWebCheckBox, 'loadPluginInWeb'));
-
-    dependenciesContent = panel.$.dependenciesContent;
-
-    dependenciesNumInput = panel.$.dependencies;
-    dependenciesNumInput.addEventListener('confirm', _onChangeDependenciesLength);
-
-    advancedSection = panel.$['advanced-section'];
-    advancedSection.setAttribute('header', t('advanced'));
-
-    isSimulateGlobalsEnabledCheckBox = panel.$['simulate-globals-enabled'];
-    isSimulateGlobalsEnabledCheckBox.addEventListener('confirm', onSimulateGlobalsStateChanged);
-
-    simulateGlobalsInput = panel.$['simulate-globals-input'];
-    simulateGlobalsInput.addEventListener('confirm', onSimulateGlobalsListChanged);
-
-    pluginOperations = panel.$this.shadowRoot.querySelectorAll('.plugin-operation');
+        while (meta.userData.dependencies.length > length) {
+            meta.userData.dependencies.pop();
+        }
+        for (let index = 0; index < length; index++) {
+            const element = childNodes[index];
+            const value = meta.userData.dependencies[index];
+            if (!element) {
+                const child = document.createElement('ui-asset');
+                child.setAttribute('index', index.toString());
+                child.setAttribute('value', value);
+                child.setAttribute('droppable', 'cc.Script');
+                child.addEventListener('confirm', onDependenciesChange.bind(child));
+                dependenciesContent.appendChild(child);
+            } else {
+                element.value = value;
+                element.setAttribute('index', index.toString());
+            }
+        }
+        if (childNodes.length > length) {
+            const needlessNodes = [];
+            for (let index = childNodes.length - 1; index > length - 1; index--) {
+                const element = childNodes[index];
+                needlessNodes.push(element);
+            }
+            needlessNodes.forEach((node) => { dependenciesContent.removeChild(node); });
+        }
+    },
+    updateSimulateGlobalsNamesInput () {
+        const meta = this.meta;
+        const isHidden = !meta.userData.simulateGlobals;
+        const simulateGlobalsInput = this.simulateGlobalsInput;
+        simulateGlobalsInput.style = isHidden ? 'display:none' : '';
+        simulateGlobalsInput.value = Array.isArray(meta.userData.simulateGlobals) ? meta.userData.simulateGlobals.join(';') : '';
+    },
+    updatePluginOperations () {
+        const meta = this.meta;
+        const pluginOperations = this.pluginOperations;
+        pluginOperations.forEach((element) => { element.hidden = !meta.userData.isPlugin || this.getInvalid('isPlugin'); });
+    },
 };
