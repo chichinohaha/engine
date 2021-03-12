@@ -4,7 +4,7 @@ exports.template = `
         id="content"
     >
         <ui-prop asset>
-            <ui-label slot="label"> SpriteFrame </ui-label>
+            <ui-label slot="label" tooltip="i18n:ENGINE.assets.particle.spriteFrameTip"> SpriteFrame </ui-label>
             <ui-asset
                 id="asset"
                 slot="content" 

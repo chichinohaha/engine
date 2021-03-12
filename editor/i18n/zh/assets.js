@@ -1,5 +1,8 @@
 module.exports = {
     assets: {
+        particle:{
+            spriteFrameTip:'Sprite Frame'
+        },
         scene: {
             asyncLoadAssets: '异步加载',
         },
