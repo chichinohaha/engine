@@ -1,13 +1,14 @@
+const { readFileSync } = require('fs');
 const { createReadStream } = require('fs-extra');
+const { join } = require('path');
 const ReadLine = require('readline');
 
 const MAX_LINES = 400;
 const MAX_LENGTH = 20000;
 
 function t (key) {
-    return Editor.I18n.t(`inspector.asset.javascript.${key}`);
+    return Editor.I18n.t(`ENGINE.assets.javascript.${key}`);
 }
-
 exports.template = `
 <section class="asset-javascript">
 
@@ -16,7 +17,7 @@ exports.template = `
             i18n
             slot="label"
         >
-        inspector.asset.javascript.plugin</ui-label>
+        ENGINE.assets.javascript.plugin</ui-label>
         <ui-checkbox 
             class="content"
             id="is-plugin"
@@ -28,10 +29,11 @@ exports.template = `
     <div
         class="plugin-operation"
     >
-        <ui-prop class="line indent">
+        <ui-prop >
             <ui-label
                 slot="label"
-            >inspector.asset.javascript.dependencies</ui-label>
+                i18n
+            >ENGINE.assets.javascript.dependencies</ui-label>
             <ui-num-input class="content" 
                 step="1" 
                 min="0" 
@@ -40,7 +42,7 @@ exports.template = `
                 id="dependencies"
             ></ui-num-input>
         </ui-prop>
-        <ui-prop class="line indent">
+        <ui-prop >
             <ui-label slot="label"></ui-label>
             <div class="assets content"
                 slot="content"
@@ -48,66 +50,61 @@ exports.template = `
             >
             </div>
         </ui-prop>
-
-        <div class="line indent">
-            <ui-section class="content"
-                id="advanced-section"
-                expand
-                expand-key="advanced"
+        <ui-prop >
+            <ui-label i18n 
+                tooltip="i18n:ENGINE.assets.javascript.executionScopeTip"
+                slot="label"
+            >ENGINE.assets.javascript.executionScope
+            </ui-label>
+            <ui-select slot="content"
+                id="executionScope"
             >
-                <ui-prop class="line">
-                    <ui-label i18n
-                        slot="label"
-                    >   
-                        inspector.asset.javascript.simulateGlobals                        
-                    </ui-label>
-                    <span
-                        slot="content"
-                    >
-                        <ui-checkbox
-                            id="simulate-globals-enabled"
-                        ></ui-checkbox>
-                        <ui-input placeholder='self;window;global;globalThis'
-                            id="simulate-globals-input"
-                            hidden
-                        ></ui-input>
-                    </span>
-                </ui-prop>
-            </ui-section>
-        </div>
+            </ui-select>
+        </ui-prop>
+
+        <ui-prop 
+            id="localContent"
+        >
+            <ui-label slot="label"></ui-label>
+            <ui-input 
+                id="simulateGlobalsInput"
+                placeholder="self;window;global;globalThis" tooltip="i18n:ENGINE.assets.javascript.simulateGlobals"
+                slot="content"
+            ></ui-input>
+        </ui-prop>
     </div>
 
     <div
         class="child plugin-operation"
     >
-        <ui-prop class="line">
+        <ui-prop >
             <ui-label i18n
                 slot="label"
             >
-            inspector.asset.javascript.loadPluginInWeb
+            ENGINE.assets.javascript.loadPluginInWeb
             </ui-label>
             <ui-checkbox
                 id="load-plugin-in-web"
                 slot="content"
             ></ui-checkbox>
         </ui-prop>
-        <ui-prop class="line"
+        <ui-prop 
         >
             <ui-label i18n
                 slot="label"
             >
-            inspector.asset.javascript.loadPluginInNative
+            ENGINE.assets.javascript.loadPluginInNative
             </ui-label>
             <ui-checkbox
                 slot="content"
                 id="load-plugin-in-native"
             ></ui-checkbox>
         </ui-prop>
-        <ui-prop class="line">
+        <ui-prop >
             <ui-label i18n
                 slot="label"
             >
-            inspector.asset.javascript.loadPluginInEditor
+            ENGINE.assets.javascript.loadPluginInEditor
             </ui-label>
             <ui-checkbox
                 slot="content"
@@ -122,8 +119,6 @@ exports.template = `
     >
     </ui-code>
 </section>
-
-
 `;
 
 exports.$ = {
@@ -134,13 +129,18 @@ exports.$ = {
     loadPluginInNativeCheckBox: '#load-plugin-in-native',
     dependenciesNumInput: '#dependencies',
     dependenciesContent: '#dependencies-content',
-    advancedSection: '#advanced-section',
-    isSimulateGlobalsEnabledCheckBox: '#simulate-globals-enabled',
-    simulateGlobalsInput: '#simulate-globals-input',
+    localContent: '#localContent',
+
+    simulateGlobalsInput: '#simulateGlobalsInput',
+    executionScope: '#executionScope',
+
 };
 
 exports.style = `
 :host > .asset-javascript > ui-code[hidden] {
+    display: none;
+}
+ui-prop[hidden]{
     display: none;
 }
 .asset-javascript {
@@ -150,12 +150,6 @@ exports.style = `
     overflow: auto;
 }
 
-.asset-javascript .indent {
-    padding-left: 20px;
-}
-.asset-javascript .indent > ui-label {
-    width: 130px;
-}
 .asset-javascript .assets > ui-asset {
     margin-top: 8px;
 }
@@ -173,6 +167,26 @@ exports.style = `
 }
 `;
 const uiElements = {
+    executionScope: {
+        ready () {
+            this.$.executionScope.addEventListener('confirm', this._onPluginStateChanged.bind(this, 'executionScope'));
+            for (const key of ['enclosed', 'global']) {
+                const option = document.createElement('option');
+                option.value = key;
+                option.innerText = t(key);
+                this.$.executionScope.appendChild(option);
+            }
+        },
+        update () {
+            this.$.executionScope.value = this.meta.userData.executionScope !== 'global' ? 'enclosed' : 'global';
+            this.$.executionScope.invalid = this.getInvalid('executionScope');
+        },
+    },
+    localContent: {
+        update () {
+            this.$.localContent.hidden = this.meta.userData.executionScope === 'global';
+        },
+    },
     isPluginCheckBox: {
         ready () {
             this.$.isPluginCheckBox.addEventListener('confirm', this._onPluginStateChanged.bind(this, 'isPlugin'));
@@ -182,14 +196,7 @@ const uiElements = {
             this.$.isPluginCheckBox.value = this.meta.userData.isPlugin;
         },
     },
-    isSimulateGlobalsEnabledCheckBox: {
-        ready () {
-            this.$.isSimulateGlobalsEnabledCheckBox.addEventListener('confirm', this.onSimulateGlobalsStateChanged);
-        },
-        update () {
-            this.$.isSimulateGlobalsEnabledCheckBox.value = !!this.meta.userData.simulateGlobals;
-        },
-    },
+
     loadPluginInWebCheckBox: {
         ready () {
             this.$.loadPluginInWebCheckBox.addEventListener('confirm', this._onPluginStateChanged.bind(this, 'loadPluginInWeb'));
@@ -235,25 +242,71 @@ const uiElements = {
             this.$.simulateGlobalsInput.addEventListener('confirm', onSimulateGlobalsListChanged);
         },
         update () {
-            this.updateSimulateGlobalsNamesInput();
-        },
-    },
-    dependenciesContent: {
-        update () {
-            this._onChangeDependenciesLength(this.meta.userData.dependencies ? this.meta.userData.dependencies.length : 0);
+            const meta = this.meta;
+            const simulateGlobalsInput = this.$.simulateGlobalsInput;
+            simulateGlobalsInput.value = Array.isArray(meta.userData.simulateGlobals) ? meta.userData.simulateGlobals.join(';') : '';
         },
     },
     dependenciesNumInput: {
         ready () {
-            this.$.dependenciesNumInput.addEventListener('confirm', this._onChangeDependenciesLength);
+            function _onChangeDependenciesLength (event) {
+                const meta = this.meta;
+                const length = event.target.value;
+                if (!Array.isArray(meta.userData.dependencies)) {
+                    meta.userData.dependencies = [];
+                }
+
+                if (length < 0 || length > 10) {
+                    return;
+                }
+                while (meta.userData.dependencies.length < length) {
+                    meta.userData.dependencies.push('');
+                }
+
+                while (meta.userData.dependencies.length > length) {
+                    meta.userData.dependencies.pop();
+                }
+                this.dispatch('change');
+                uiElements.dependenciesNumInput.update.call(this);
+            }
+            this.$.dependenciesNumInput.addEventListener('confirm', _onChangeDependenciesLength.bind(this));
         },
         update () {
             this.$.dependenciesNumInput.value = this.meta.userData.dependencies ? this.meta.userData.dependencies.length : 0;
-        },
-    },
-    advancedSection: {
-        ready () {
-            this.$.advancedSection.setAttribute('header', t('advanced'));
+            const dependenciesContent = this.$.dependenciesContent;
+            const childNodes = dependenciesContent.children;
+            const meta = this.meta;
+            const length = this.$.dependenciesNumInput.value;
+
+            function onDependenciesChange (event) {
+                const value = event.target.value;
+                this.value = value;
+                meta.userData.dependencies[this.getAttribute('index')] = value;
+                this.dispatch('change');
+            }
+
+            for (let index = 0; index < length; index++) {
+                const element = childNodes[index];
+                const value = meta.userData.dependencies[index];
+                if (!element) {
+                    const child = document.createElement('ui-asset');
+                    child.setAttribute('index', index.toString());
+                    child.setAttribute('value', value);
+                    child.setAttribute('droppable', 'cc.Script');
+                    child.addEventListener('confirm', onDependenciesChange.bind(child));
+                    dependenciesContent.appendChild(child);
+                } else {
+                    element.value = value;
+                    element.setAttribute('index', index.toString());
+                }
+            }
+            if (childNodes.length > length) {
+                const needlessNodes = [];
+                for (let index = childNodes.length - 1; index > length - 1; index--) {
+                    const element = childNodes[index];
+                    needlessNodes.push(element);
+                }
+                needlessNodes.forEach((node) => { dependenciesContent.removeChild(node); });
         },
     },
     pluginOperations: {
@@ -261,7 +314,9 @@ const uiElements = {
             this.pluginOperations = this.$this.shadowRoot.querySelectorAll('.plugin-operation');
         },
         update () {
-            this.updatePluginOperations();
+            const meta = this.meta;
+            const pluginOperations = this.pluginOperations;
+            pluginOperations.forEach((element) => { element.hidden = !meta.userData.isPlugin || this.getInvalid('isPlugin'); });
         },
     },
     code: {
@@ -312,9 +367,6 @@ const uiElements = {
  * Methods to automatically render components
  */
 exports.update = function (assetList, metaList) {
-    if (this.metas === metaList) {
-        return;
-    }
     this.metas = metaList;
     this.meta = this.metas[0];
     this.assetInfos = assetList;
@@ -340,12 +392,6 @@ exports.ready = function () {
 };
 
 exports.methods = {
-    onSimulateGlobalsStateChanged (event) {
-        const metas = this.metas;
-        metas.forEach((meta) => { meta.userData.simulateGlobals = event.target.value; });
-        this.dispatch('change');
-        this.updateSimulateGlobalsNamesInput();
-    },
     /**
    * Checks whether a data is invalid in the multiple - selected state
    * @param key string
@@ -376,75 +422,8 @@ exports.methods = {
                 }
             }
         });
-        this.updatePluginOperations();
+        exports.update.call(this, this.assetInfos, this.metas);
         this.dispatch('change');
     },
-    /**
-    * Modify the length of the dependent script
-    * @param param number|event
-    * @returns void
-    */
-    _onChangeDependenciesLength (param) {
-        const dependenciesContent = this.$.dependenciesContent;
-        const childNodes = dependenciesContent.children;
-        const meta = this.meta;
-        const length = typeof param === 'number' ? param : Number(param.target.value);
-        this.dispatch('change');
-        function onDependenciesChange (event) {
-            const value = event.target.value;
-            this.value = value;
-            meta.userData.dependencies[this.getAttribute('index')] = value;
-            this.dispatch('change');
-        }
 
-        if (!Array.isArray(meta.userData.dependencies)) {
-            meta.userData.dependencies = [];
-        }
-
-        if (length < 0 || length > 10) {
-            return;
-        }
-        while (meta.userData.dependencies.length < length) {
-            meta.userData.dependencies.push('');
-        }
-
-        while (meta.userData.dependencies.length > length) {
-            meta.userData.dependencies.pop();
-        }
-        for (let index = 0; index < length; index++) {
-            const element = childNodes[index];
-            const value = meta.userData.dependencies[index];
-            if (!element) {
-                const child = document.createElement('ui-asset');
-                child.setAttribute('index', index.toString());
-                child.setAttribute('value', value);
-                child.setAttribute('droppable', 'cc.Script');
-                child.addEventListener('confirm', onDependenciesChange.bind(child));
-                dependenciesContent.appendChild(child);
-            } else {
-                element.value = value;
-                element.setAttribute('index', index.toString());
-            }
-        }
-        if (childNodes.length > length) {
-            const needlessNodes = [];
-            for (let index = childNodes.length - 1; index > length - 1; index--) {
-                const element = childNodes[index];
-                needlessNodes.push(element);
-            }
-            needlessNodes.forEach((node) => { dependenciesContent.removeChild(node); });
-        }
-    },
-    updateSimulateGlobalsNamesInput () {
-        const meta = this.meta;
-        const isHidden = !meta.userData.simulateGlobals;
-        const simulateGlobalsInput = this.$.simulateGlobalsInput;
-        simulateGlobalsInput.style = isHidden ? 'display:none' : '';
-        simulateGlobalsInput.value = Array.isArray(meta.userData.simulateGlobals) ? meta.userData.simulateGlobals.join(';') : '';
-    },
-    updatePluginOperations () {
-        const meta = this.meta;
-        const pluginOperations = this.pluginOperations;
-        pluginOperations.forEach((element) => { element.hidden = !meta.userData.isPlugin || this.getInvalid('isPlugin'); });
-    },
 };
