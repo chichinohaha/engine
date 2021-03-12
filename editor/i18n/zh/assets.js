@@ -12,9 +12,6 @@ module.exports = {
             StartChar: 'Start Char',
             FontSize: 'Font Size',
         },
-        particle:{
-            spriteFrameTip:'Sprite Frame'
-        },
         erpTextureCube: {
             anisotropy: 'Anisotropy',
             minFilter: 'Min Filter',
@@ -53,6 +50,9 @@ module.exports = {
             loadPluginInEditorTip: 'Load In Editor',
             loadPluginInNativeTip: 'Load In Native',
             simulateGlobalsTip: 'Simulate global variables',
+        },
+        particle: {
+            spriteFrameTip: 'Sprite Frame',
         },
         scene: {
             asyncLoadAssets: '异步加载',
@@ -206,12 +206,12 @@ module.exports = {
             disableMeshSplit: {
                 name: '是否禁用 Mesh 拆分',
                 title:
-                    '为了解决实时骨骼动画系统下 uniform vector 数量限制问题，<br> ' +
-                    '目前在资源导入期会根据骨骼数量做拆分，这会对其他系统也产生影响。<br>' +
-                    '如果确定不会使用实时计算模式 (对应 SkeletalAnimation 组件的 <br> ' +
-                    'useBakedAnimation 选项未勾选时)，可以勾选此项以提升性能。<br>' +
-                    '但注意改变此选项会影响生成的 prefab 内容，需要对应更新场景中的引用。<br>' +
-                    '后续重构会移除此流程。',
+                    '为了解决实时骨骼动画系统下 uniform vector 数量限制问题，<br> '
+                    + '目前在资源导入期会根据骨骼数量做拆分，这会对其他系统也产生影响。<br>'
+                    + '如果确定不会使用实时计算模式 (对应 SkeletalAnimation 组件的 <br> '
+                    + 'useBakedAnimation 选项未勾选时)，可以勾选此项以提升性能。<br>'
+                    + '但注意改变此选项会影响生成的 prefab 内容，需要对应更新场景中的引用。<br>'
+                    + '后续重构会移除此流程。',
             },
             meshOptimizer: {
                 name: 'Mesh Optimizer',

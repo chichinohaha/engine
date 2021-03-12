@@ -12,8 +12,8 @@ module.exports = {
             StartChar: 'Start Char',
             FontSize: 'Font Size',
         },
-        particle:{
-            spriteFrameTip:'Sprite Frame'
+        particle: {
+            spriteFrameTip: 'Sprite Frame',
         },
         erpTextureCube: {
             anisotropy: 'Anisotropy',
@@ -123,7 +123,7 @@ module.exports = {
             wrapModeT: 'Wrap Mode T',
             wrapModeTTip: 'Wrap Mode T',
             modeWarn:
-                "Warning: WebGL 1.0 platform doesn't support 'repeat' filter for non-power-of-two textures(runtime fallback to 'clamp-to-edge'), effectively disabling features like the 'tilingOffset' property in many materials.",
+                'Warning: WebGL 1.0 platform doesn\'t support \'repeat\' filter for non-power-of-two textures(runtime fallback to \'clamp-to-edge\'), effectively disabling features like the \'tilingOffset\' property in many materials.',
         },
         fbx: {
             browse: 'Change Target',
@@ -208,14 +208,14 @@ module.exports = {
             disableMeshSplit: {
                 name: 'Disable mesh split',
                 title:
-                    'Currently there is a joint-counting-based mesh splitting process during the <br>' +
-                    'import pipeline to workaround the max uniform vector limit problem for real-time <br>' +
-                    'calculated skeletal animation system on many platforms. This process has a performance <br>' +
-                    'impact on other runtime systems too. So if it can be pre-determined that the real-time <br>' +
-                    'calculated skeletal animations (when useBakedAnimations is unchecked on SkeletalAnimation <br>' +
-                    'component) will not be used, this option can be checked to improve performance. But note that <br> ' +
-                    'toggling this would update the corresponding prefab, so all the references in the scene should be <br>' +
-                    'updated as well to accompany that. To be removed in further refactors.',
+                    'Currently there is a joint-counting-based mesh splitting process during the <br>'
+                    + 'import pipeline to workaround the max uniform vector limit problem for real-time <br>'
+                    + 'calculated skeletal animation system on many platforms. This process has a performance <br>'
+                    + 'impact on other runtime systems too. So if it can be pre-determined that the real-time <br>'
+                    + 'calculated skeletal animations (when useBakedAnimations is unchecked on SkeletalAnimation <br>'
+                    + 'component) will not be used, this option can be checked to improve performance. But note that <br> '
+                    + 'toggling this would update the corresponding prefab, so all the references in the scene should be <br>'
+                    + 'updated as well to accompany that. To be removed in further refactors.',
             },
             meshOptimizer: {
                 name: 'Mesh Optimizer',
