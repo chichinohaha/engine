@@ -307,6 +307,7 @@ const uiElements = {
                     needlessNodes.push(element);
                 }
                 needlessNodes.forEach((node) => { dependenciesContent.removeChild(node); });
+            }
         },
     },
     pluginOperations: {
