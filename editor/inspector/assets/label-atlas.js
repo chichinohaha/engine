@@ -53,38 +53,34 @@ exports.template = `
 const uiElements = {
     spriteFrame: {
         ready () {
-            this.spriteFrame = this.$.spriteFrame;
-            this.spriteFrame.addEventListener('change', this._onDataChanged.bind(this, 'spriteFrameUuid'));
+            this.$.spriteFrame.addEventListener('change', this._onDataChanged.bind(this, 'spriteFrameUuid'));
         },
         update () {
-            this.spriteFrame.value = this.meta.userData.spriteFrameUuid;
+            this.$.spriteFrame.value = this.meta.userData.spriteFrameUuid;
         },
     },
     itemWidth: {
         ready () {
-            this.itemWidth = this.$.itemWidth;
-            this.itemWidth.addEventListener('change', this._onDataChanged.bind(this, 'itemWidth'));
+            this.$.itemWidth.addEventListener('change', this._onDataChanged.bind(this, 'itemWidth'));
         },
         update () {
-            this.itemWidth.value = this.meta.userData.itemWidth;
+            this.$.itemWidth.value = this.meta.userData.itemWidth;
         },
     },
     itemHeight: {
         ready () {
-            this.itemHeight = this.$.itemHeight;
-            this.itemHeight.addEventListener('change', this._onDataChanged.bind(this, 'itemHeight'));
+            this.$.itemHeight.addEventListener('change', this._onDataChanged.bind(this, 'itemHeight'));
         },
         update () {
-            this.itemHeight.value = this.meta.userData.itemHeight;
+            this.$.itemHeight.value = this.meta.userData.itemHeight;
         },
     },
     startChar: {
         ready () {
-            this.startChar = this.$.startChar;
-            this.startChar.addEventListener('change', this._onDataChanged.bind(this, 'startChar'));
+            this.$.startChar.addEventListener('change', this._onDataChanged.bind(this, 'startChar'));
         },
         update () {
-            this.startChar.value = this.meta.userData.startChar;
+            this.$.startChar.value = this.meta.userData.startChar;
         },
     },
     fontSize: {
@@ -117,6 +113,7 @@ exports.methods = {
     _onDataChanged (key, event) {
         this.meta.userData[key] = event.target.value;
         this.dispatch('change');
+        exports.update(this.assetInfos, this.metas);
     },
 };
 
