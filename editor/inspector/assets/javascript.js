@@ -16,6 +16,7 @@ exports.template = `
         <ui-label 
             i18n
             slot="label"
+            tooltip="i18n:ENGINE.assets.javascript.pluginTip"
         >
         ENGINE.assets.javascript.plugin</ui-label>
         <ui-checkbox 
@@ -33,6 +34,7 @@ exports.template = `
             <ui-label
                 slot="label"
                 i18n
+                tooltip="i18n:ENGINE.assets.javascript.dependenciesTip"
             >ENGINE.assets.javascript.dependencies</ui-label>
             <ui-num-input class="content" 
                 step="1" 
@@ -80,6 +82,7 @@ exports.template = `
         <ui-prop >
             <ui-label i18n
                 slot="label"
+                tooltip="i18n:ENGINE.assets.javascript.loadPluginInWebTip"
             >
             ENGINE.assets.javascript.loadPluginInWeb
             </ui-label>
@@ -92,6 +95,7 @@ exports.template = `
         >
             <ui-label i18n
                 slot="label"
+                tooltip="i18n:ENGINE.assets.javascript.loadPluginInNativeTip"
             >
             ENGINE.assets.javascript.loadPluginInNative
             </ui-label>
@@ -103,6 +107,7 @@ exports.template = `
         <ui-prop >
             <ui-label i18n
                 slot="label"
+                tooltip="i18n:ENGINE.assets.javascript.loadPluginInEditorTip"
             >
             ENGINE.assets.javascript.loadPluginInEditor
             </ui-label>
