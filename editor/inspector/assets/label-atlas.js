@@ -119,7 +119,9 @@ exports.methods = {
 
 exports.ready = function () {
     for (const key in uiElements) {
-        uiElements[key].ready.call(this);
+        if (uiElements[key].ready) {
+            uiElements[key].ready.call(this);
+        }
     }
 };
 
@@ -129,6 +131,8 @@ exports.update = function (assetList, metaList) {
     this.assetInfos = assetList;
     this.assetInfo = assetList[0];
     for (const key in uiElements) {
-        uiElements[key].update.call(this);
+        if (uiElements[key].update) {
+            uiElements[key].update.call(this);
+        }
     }
 };
