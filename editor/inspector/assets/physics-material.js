@@ -57,6 +57,6 @@ exports.update = async function (assetList, metaList) {
     }
     for (let index = children.length - 1; index > i - 1; index--) {
         const element = children[index];
-        element.a.remove();
+        element.remove();
     }
 };
