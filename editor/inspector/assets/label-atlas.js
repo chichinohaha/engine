@@ -57,6 +57,7 @@ const uiElements = {
         },
         update () {
             this.$.spriteFrame.value = this.meta.userData.spriteFrameUuid;
+            this.$.spriteFrame.disabled = this.assetInfo.readonly;
         },
     },
     itemWidth: {
@@ -65,6 +66,7 @@ const uiElements = {
         },
         update () {
             this.$.itemWidth.value = this.meta.userData.itemWidth;
+            this.$.itemWidth.disabled = this.assetInfo.readonly;
         },
     },
     itemHeight: {
@@ -73,6 +75,7 @@ const uiElements = {
         },
         update () {
             this.$.itemHeight.value = this.meta.userData.itemHeight;
+            this.$.itemHeight.disabled = this.assetInfo.readonly;
         },
     },
     startChar: {
@@ -81,6 +84,7 @@ const uiElements = {
         },
         update () {
             this.$.startChar.value = this.meta.userData.startChar;
+            this.$.startChar.disabled = this.assetInfo.readonly;
         },
     },
     fontSize: {
@@ -89,6 +93,7 @@ const uiElements = {
         },
         update () {
             this.fontSize.value = this.meta.userData.fontSize;
+            this.$.fontSize.disabled = this.assetInfo.readonly;
         },
     },
     allContent: {
