@@ -1,5 +1,18 @@
 module.exports = {
     assets: {
+        erpTextureCube: {
+            AnisotropyTip: 'Anisotropy',
+            MinFilterTip: 'Min Filter',
+            MagFilterTip: 'Mag Filter',
+            MipFilterTip: 'Mip Filter',
+            WrapModeSTip: 'Wrap Mode S',
+            WrapModeTTip: 'Wrap Mode T',
+            facesize: {
+                name: '',
+                facesize:
+                    '每个面的尺寸。如果未指定或指定为0，将使用默认尺寸——最接近贴图宽度 / 4 的2次幂。',
+            },
+        },
         scene: {
             asyncLoadAssets: '异步加载',
         },
@@ -59,6 +72,6 @@ module.exports = {
             wrapModeTTip: 'Wrap Mode T',
             modeWarn:
             '警告：WebGL 1.0 平台不支持非 2 次幂贴图的 repeat 过滤模式，运行时会自动改为 clamp-to-edge 模式，这会使材质的 tilingOffset 等属性完全失效。',
-        }
+        },
     },
 };

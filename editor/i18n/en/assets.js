@@ -1,5 +1,18 @@
 module.exports = {
     assets: {
+        erpTextureCube: {
+            AnisotropyTip: 'Anisotropy',
+            MinFilterTip: 'Min Filter',
+            MagFilterTip: 'Mag Filter',
+            MipFilterTip: 'Mip Filter',
+            WrapModeSTip: 'Wrap Mode S',
+            WrapModeTTip: 'Wrap Mode T',
+            facesize: {
+                name: '',
+                facesize:
+                    'Size of each cube face. If not specified, or specified as 0, the default size, which is the nearest power of two to (image.width)/4, is used.',
+            },
+        },
         scene: {
             asyncLoadAssets: 'Async Load Assets',
         },
@@ -58,7 +71,7 @@ module.exports = {
             wrapModeT: 'Wrap Mode T',
             wrapModeTTip: 'Wrap Mode T',
             modeWarn:
-                "Warning: WebGL 1.0 platform doesn't support 'repeat' filter for non-power-of-two textures(runtime fallback to 'clamp-to-edge'), effectively disabling features like the 'tilingOffset' property in many materials.",
+                'Warning: WebGL 1.0 platform doesn\'t support \'repeat\' filter for non-power-of-two textures(runtime fallback to \'clamp-to-edge\'), effectively disabling features like the \'tilingOffset\' property in many materials.',
         },
     },
 };

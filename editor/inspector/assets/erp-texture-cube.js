@@ -3,73 +3,83 @@ exports.template = `
     <div class="content"        
         id="all-content"
     >
-        <ui-prop
-            id="anisotropy"
-        >
+        <ui-prop>
             <span slot="label">
-                <ui-label tooltip="Anisotropy">Anisotropy</ui-label>
+                <ui-label tooltip="i18n:ENGINE.assets.erpTextureCube.AnisotropyTip">Anisotropy</ui-label>
                 <ui-icon value="lock"></ui-icon>
             </span>
             <ui-num-input slot="content"    
+                id="anisotropy"
             ></ui-num-input>
         </ui-prop>
-        <ui-prop id="faceSize">
+        <ui-prop>
             <span slot="label">
-                <ui-label tooltip="i18n:inspector.asset.erpTextureCube.facesize.title"
+                <ui-label tooltip="i18n:ENGINE.assets.erpTextureCube.facesize.title"
                 >Face Size</ui-label>
                 <ui-icon value="lock"></ui-icon>
             </span>
             <ui-num-input slot="content"    
+                id="faceSize"
             ></ui-num-input>
         </ui-prop>
-        <ui-prop id="minfilter">
+        <ui-prop>
             <span slot="label">
-                <ui-label tooltip="Min Filter">Min Filter</ui-label>
+                <ui-label tooltip="i18n:ENGINE.assets.erpTextureCube.MinFilterTip">Min Filter</ui-label>
                 <ui-icon value="lock"></ui-icon>
             </span>
-            <ui-select slot="content">
+            <ui-select slot="content"
+                id="minfilter"
+            >
                 <option>nearest</option>
                 <option>linear</option>
             </ui-select>
         </ui-prop>
-        <ui-prop id="magfilter">
+        <ui-prop>
             <span slot="label">
-                <ui-label tooltip="Mag Filter">Mag Filter</ui-label>
+                <ui-label tooltip="i18n:ENGINE.assets.erpTextureCube.MagFilterTip">Mag Filter</ui-label>
                 <ui-icon value="lock"></ui-icon>
             </span>
-            <ui-select slot="content">
+            <ui-select slot="content"
+                id="magfilter"
+            >
                 <option>nearest</option>
                 <option>linear</option>
             </ui-select>
         </ui-prop>
-        <ui-prop id="mipfilter">
+        <ui-prop>
             <span slot="label">
-                <ui-label tooltip="Mip Filter">Mip Filter</ui-label>
+                <ui-label tooltip="i18n:ENGINE.assets.erpTextureCube.MipFilterTip">Mip Filter</ui-label>
                 <ui-icon value="lock"></ui-icon>
             </span>
-            <ui-select slot="content">
+            <ui-select slot="content"
+                id="mipfilter"
+            >
                 <option>none</option>
                 <option>nearest</option>
                 <option>linear</option>
             </ui-select>
         </ui-prop>
-        <ui-prop id="wrapModeS">
+        <ui-prop>
             <span slot="label">
-                <ui-label tooltip="Wrap Mode S">Wrap Mode S</ui-label>
+                <ui-label tooltip="i18n:ENGINE.assets.erpTextureCube.WrapModeSTip">Wrap Mode S</ui-label>
                 <ui-icon value="lock"></ui-icon>
             </span>
-            <ui-select slot="content">
+            <ui-select slot="content"
+                id="wrapModeS"
+            >
                 <option>repeat</option>
                 <option>clamp-to-edge</option>
                 <option>mirrored-repeat</option>
             </ui-select>
         </ui-prop>
-        <ui-prop id="wrapModeT">
+        <ui-prop>
             <span slot="label">
-                <ui-label tooltip="Wrap Mode T">Wrap Mode T</ui-label>
+                <ui-label tooltip="i18n:ENGINE.assets.erpTextureCube.WrapModeTTip">Wrap Mode T</ui-label>
                 <ui-icon value="lock" ></ui-icon>
             </span>
-            <ui-select slot="content">
+            <ui-select slot="content"
+                id="wrapModeT"
+            >
                 <option>repeat</option>
                 <option>clamp-to-edge</option>
                 <option>mirrored-repeat</option>
@@ -178,7 +188,9 @@ exports.$ = {
 
 exports.ready = function () {
     for (const key in uiElements) {
-        uiElements[key].ready.call(this);
+        if (typeof uiElements[key].ready === 'function') {
+            uiElements[key].ready.call(this);
+        }
     }
 };
 
@@ -188,22 +200,21 @@ exports.update = function (assetList, metaList) {
     this.assetInfos = assetList;
     this.assetInfo = assetList[0];
     for (const key in uiElements) {
-        uiElements[key].update.call(this);
+        if (typeof uiElements[key].update === 'function') {
+            uiElements[key].update.call(this);
+        }
     }
 };
 
 const uiElements = {
     allContent: {
-        ready () {
-            this.allContent = this.$.allContent;
-        },
         update () {
-            this.allContent.hidden = !this.meta;
+            this.$.allContent.hidden = !this.meta;
         },
     },
     lockIcons: {
         ready () {
-            this.lockIcons = this.$this.shadowRoot.querySelectorAll('ui-icon');
+            this.lockIcons = this.$this.shadowRoot.querySelectorAll('ui-icon[value="lock"]');
         },
         update () {
             this.lockIcons.forEach((icon) => {
@@ -214,79 +225,72 @@ const uiElements = {
     },
     anisotropy: {
         ready () {
-            this.anisotropy = this.$.anisotropy.querySelector('ui-num-input');
-            this.anisotropy.addEventListener('change', this._onChangeData.bind(this, 'anisotropy'));
+            this.$.anisotropy.addEventListener('change', this._onChangeData.bind(this, 'anisotropy'));
         },
         update () {
-            this.anisotropy.invalid = this.getInvalid('anisotropy');
-            this.anisotropy.disabled = this.assetInfo.readonly;
-            this.anisotropy.value = this.meta.userData.anisotropy;
+            this.$.anisotropy.invalid = this.getInvalid('anisotropy');
+            this.$.anisotropy.disabled = this.assetInfo.readonly;
+            this.$.anisotropy.value = this.meta.userData.anisotropy;
         },
     },
     faceSize: {
         ready () {
-            this.faceSize = this.$.faceSize.querySelector('ui-num-input');
-            this.faceSize.addEventListener('change', this._onChangeData.bind(this, 'faceSize'));
+            this.$.faceSize.addEventListener('change', this._onChangeData.bind(this, 'faceSize'));
         },
         update () {
-            this.faceSize.invalid = this.getInvalid('faceSize');
-            this.faceSize.disabled = this.assetInfo.readonly;
-            this.faceSize.value = this.meta.userData.faceSize;
+            this.$.faceSize.invalid = this.getInvalid('faceSize');
+            this.$.faceSize.disabled = this.assetInfo.readonly;
+            this.$.faceSize.value = this.meta.userData.faceSize;
         },
     },
     minfilter: {
         ready () {
-            this.minfilter = this.$.minfilter.querySelector('ui-select');
-            this.minfilter.addEventListener('change', this._onChangeData.bind(this, 'minfilter'));
+            this.$.minfilter.addEventListener('change', this._onChangeData.bind(this, 'minfilter'));
         },
         update () {
-            this.minfilter.invalid = this.getInvalid('minfilter');
-            this.minfilter.disabled = this.assetInfo.readonly;
-            this.minfilter.value = this.meta.userData.minfilter;
+            this.$.minfilter.invalid = this.getInvalid('minfilter');
+            this.$.minfilter.disabled = this.assetInfo.readonly;
+            this.$.minfilter.value = this.meta.userData.minfilter;
         },
     },
     magfilter: {
         ready () {
-            this.magfilter = this.$.magfilter.querySelector('ui-select');
-            this.magfilter.addEventListener('change', this._onChangeData.bind(this, 'magfilter'));
+            this.$.magfilter.addEventListener('change', this._onChangeData.bind(this, 'magfilter'));
         },
         update () {
-            this.magfilter.invalid = this.getInvalid('magfilter');
-            this.magfilter.disabled = this.assetInfo.readonly;
-            this.magfilter.value = this.meta.userData.magfilter;
+            this.$.magfilter.invalid = this.getInvalid('magfilter');
+            this.$.magfilter.disabled = this.assetInfo.readonly;
+            this.$.magfilter.value = this.meta.userData.magfilter;
         },
     },
     mipfilter: {
         ready () {
-            this.mipfilter = this.$.mipfilter.querySelector('ui-select');
-            this.mipfilter.addEventListener('change', this._onChangeData.bind(this, 'mipfilter'));
+            this.$.mipfilter.addEventListener('change', this._onChangeData.bind(this, 'mipfilter'));
         },
         update () {
-            this.mipfilter.invalid = this.getInvalid('mipfilter');
-            this.mipfilter.disabled = this.assetInfo.readonly;
-            this.mipfilter.value = this.meta.userData.mipfilter;
+            this.$.mipfilter.invalid = this.getInvalid('mipfilter');
+            this.$.mipfilter.disabled = this.assetInfo.readonly;
+            this.$.mipfilter.value = this.meta.userData.mipfilter;
         },
     },
     wrapModeS: {
         ready () {
-            this.wrapModeS = this.$.wrapModeS.querySelector('ui-select');
-            this.wrapModeS.addEventListener('change', this._onChangeData.bind(this, 'wrapModeS'));
+            this.$.wrapModeS.addEventListener('change', this._onChangeData.bind(this, 'wrapModeS'));
         },
         update () {
-            this.wrapModeS.invalid = this.getInvalid('wrapModeS');
-            this.wrapModeS.disabled = this.assetInfo.readonly;
-            this.wrapModeS.value = this.meta.userData.wrapModeS;
+            this.$.wrapModeS.invalid = this.getInvalid('wrapModeS');
+            this.$.wrapModeS.disabled = this.assetInfo.readonly;
+            this.$.wrapModeS.value = this.meta.userData.wrapModeS;
         },
     },
     wrapModeT: {
         ready () {
-            this.wrapModeT = this.$.wrapModeT.querySelector('ui-select');
-            this.wrapModeT.addEventListener('change', this._onChangeData.bind(this, 'wrapModeT'));
+            this.$.wrapModeT.addEventListener('change', this._onChangeData.bind(this, 'wrapModeT'));
         },
         update () {
-            this.wrapModeT.invalid = this.getInvalid('wrapModeT');
-            this.wrapModeT.disabled = this.assetInfo.readonly;
-            this.wrapModeT.value = this.meta.userData.wrapModeT;
+            this.$.wrapModeT.invalid = this.getInvalid('wrapModeT');
+            this.$.wrapModeT.disabled = this.assetInfo.readonly;
+            this.$.wrapModeT.value = this.meta.userData.wrapModeT;
         },
     },
 
