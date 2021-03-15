@@ -1,11 +1,11 @@
 module.exports = {
     assets: {
-        'label-atlas':{
+        'label-atlas': {
             SpriteFrameTip: 'SpriteFrame',
             ItemWidthTip: 'Item Width',
             ItemHeightTip: 'Item Height',
             StartCharTip: 'Start Char',
-            FontSizeTip: 'Font Size'
+            FontSizeTip: 'Font Size',
         },
         scene: {
             asyncLoadAssets: 'Async Load Assets',
@@ -65,7 +65,7 @@ module.exports = {
             wrapModeT: 'Wrap Mode T',
             wrapModeTTip: 'Wrap Mode T',
             modeWarn:
-                "Warning: WebGL 1.0 platform doesn't support 'repeat' filter for non-power-of-two textures(runtime fallback to 'clamp-to-edge'), effectively disabling features like the 'tilingOffset' property in many materials.",
+                'Warning: WebGL 1.0 platform doesn\'t support \'repeat\' filter for non-power-of-two textures(runtime fallback to \'clamp-to-edge\'), effectively disabling features like the \'tilingOffset\' property in many materials.',
         },
     },
 };

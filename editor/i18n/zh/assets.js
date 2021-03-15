@@ -1,11 +1,11 @@
 module.exports = {
     assets: {
-        'label-atlas':{
+        'label-atlas': {
             SpriteFrameTip: 'SpriteFrame',
             ItemWidthTip: 'Item Width',
             ItemHeightTip: 'Item Height',
             StartCharTip: 'Start Char',
-            FontSizeTip: 'Font Size'
+            FontSizeTip: 'Font Size',
         },
         scene: {
             asyncLoadAssets: '异步加载',
@@ -66,6 +66,6 @@ module.exports = {
             wrapModeTTip: 'Wrap Mode T',
             modeWarn:
             '警告：WebGL 1.0 平台不支持非 2 次幂贴图的 repeat 过滤模式，运行时会自动改为 clamp-to-edge 模式，这会使材质的 tilingOffset 等属性完全失效。',
-        }
+        },
     },
 };
