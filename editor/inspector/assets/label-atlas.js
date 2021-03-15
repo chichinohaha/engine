@@ -4,7 +4,7 @@ exports.template = `
         id="allContent"
     >
         <ui-prop asset >
-            <ui-label slot="label"> SpriteFrame </ui-label>
+            <ui-label slot="label" i18n> ENGINE.assets.label-atlas.SpriteFrameTip </ui-label>
             <ui-asset
                 id="spriteFrame"
                 slot="content" 
@@ -12,7 +12,7 @@ exports.template = `
             ></ui-asset>
         </ui-prop>
         <ui-prop >
-            <ui-label slot="label"> Item Width </ui-label>
+            <ui-label slot="label" i18n> ENGINE.assets.label-atlas.ItemWidthTip </ui-label>
             <ui-num-input
                 id="itemWidth"
                 slot="content"
@@ -22,7 +22,7 @@ exports.template = `
             ></ui-num-input>
         </ui-prop>
         <ui-prop>
-            <ui-label slot="label"> Item Height </ui-label>
+            <ui-label slot="label" i18n> ENGINE.assets.label-atlas.ItemHeightTip </ui-label>
             <ui-num-input
                 id="itemHeight"
                 slot="content"
@@ -32,14 +32,14 @@ exports.template = `
             ></ui-num-input>
         </ui-prop>
         <ui-prop>
-            <ui-label slot="label"> Start Char </ui-label>
+            <ui-label slot="label" i18n> ENGINE.assets.label-atlas.StartCharTip </ui-label>
             <ui-input
                 slot="content"
                 id="startChar"
             ></ui-input>
         </ui-prop>
         <ui-prop>
-            <ui-label slot="label"> Font Size </ui-label>
+            <ui-label slot="label" i18n> ENGINE.assets.label-atlas.FontSizeTip </ui-label>
             <ui-input
                 id="fontSize"
                 slot="content"

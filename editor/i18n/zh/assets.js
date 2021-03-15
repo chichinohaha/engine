@@ -1,5 +1,12 @@
 module.exports = {
     assets: {
+        'label-atlas':{
+            SpriteFrameTip: 'SpriteFrame',
+            ItemWidthTip: 'Item Width',
+            ItemHeightTip: 'Item Height',
+            StartCharTip: 'Start Char',
+            FontSizeTip: 'Font Size'
+        },
         scene: {
             asyncLoadAssets: '异步加载',
         },
