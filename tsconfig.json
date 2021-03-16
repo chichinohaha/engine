@@ -33,8 +33,5 @@
         "./node_modules/@types/jest/index"
       ]
     },
-    "include": [
-        "exports/**/*.ts",
-        "index.ts"
-    ]
+
   }
