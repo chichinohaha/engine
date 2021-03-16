@@ -29,16 +29,9 @@ exports.update = async function (assetList, metaList) {
     this.metas = metaList;
     this.meta = this.metas[0];
     this.assetInfo = assetList[0];
-    if (this.meta !== metaList[0]) {
-        this.meta = this.metas[0];
-        requestAnimationFrame(() => {
-            this.loadPhysicsMaterial();
-        });
-    }
     this.readonly = this.assetInfo.readyonly;
     this.PhysicsMaterial = await Editor.Message.request('scene', 'query-physics-material', this.assetInfo.uuid);
     const children = this.$.content.childNodes;
-
     let i = 0;
     for (const key in this.PhysicsMaterial) {
         const dump = this.PhysicsMaterial[key];
