@@ -6,6 +6,11 @@ module.exports = {
             ItemHeightTip: 'Item Height',
             StartCharTip: 'Start Char',
             FontSizeTip: 'Font Size',
+            SpriteFrame: 'SpriteFrame',
+            ItemWidth: 'Item Width',
+            ItemHeight: 'Item Height',
+            StartChar: 'Start Char',
+            FontSize: 'Font Size',
         },
         javascript: {
             plugin: '导入为插件',

@@ -4,7 +4,7 @@ exports.template = `
         id="allContent"
     >
         <ui-prop asset >
-            <ui-label slot="label" tooltip="i18n:ENGINE.assets.label-atlas.SpriteFrameTip"> SpriteFrame </ui-label>
+            <ui-label slot="label" i18n tooltip="i18n:ENGINE.assets.label-atlas.SpriteFrameTip"> ENGINE.assets.label-atlas.SpriteFrame </ui-label>
             <ui-asset
                 id="spriteFrame"
                 slot="content" 
@@ -12,7 +12,7 @@ exports.template = `
             ></ui-asset>
         </ui-prop>
         <ui-prop >
-            <ui-label slot="label" tooltip="i18n:ENGINE.assets.label-atlas.ItemWidthTip"> Item Width </ui-label>
+            <ui-label slot="label" i18n tooltip="i18n:ENGINE.assets.label-atlas.ItemWidthTip"> ENGINE.assets.label-atlas.ItemWidth </ui-label>
             <ui-num-input
                 id="itemWidth"
                 slot="content"
@@ -22,7 +22,7 @@ exports.template = `
             ></ui-num-input>
         </ui-prop>
         <ui-prop>
-            <ui-label slot="label" tooltip="i18n:ENGINE.assets.label-atlas.ItemHeightTip"> Item Height </ui-label>
+            <ui-label slot="label" i18n tooltip="i18n:ENGINE.assets.label-atlas.ItemHeightTip"> ENGINE.assets.label-atlas.ItemHeight </ui-label>
             <ui-num-input
                 id="itemHeight"
                 slot="content"
@@ -32,14 +32,14 @@ exports.template = `
             ></ui-num-input>
         </ui-prop>
         <ui-prop>
-            <ui-label slot="label" tooltip="i18n:ENGINE.assets.label-atlas.StartCharTip"> Start Char </ui-label>
+            <ui-label slot="label" i18n tooltip="i18n:ENGINE.assets.label-atlas.StartCharTip"> ENGINE.assets.label-atlas.StartChar </ui-label>
             <ui-input
                 slot="content"
                 id="startChar"
             ></ui-input>
         </ui-prop>
         <ui-prop>
-            <ui-label slot="label" tooltip="i18n:ENGINE.assets.label-atlas.FontSizeTip"> Font Size </ui-label>
+            <ui-label slot="label" i18n tooltip="i18n:ENGINE.assets.label-atlas.FontSizeTip"> ENGINE.assets.label-atlas.FontSize </ui-label>
             <ui-input
                 id="fontSize"
                 slot="content"
