@@ -1,8 +1,6 @@
 exports.template = `
 <section>
-    <div class="content"
-        id="allContent"
-    >
+    <div class="content">
         <ui-prop asset >
             <ui-label slot="label" i18n tooltip="i18n:ENGINE.assets.label-atlas.SpriteFrameTip"> ENGINE.assets.label-atlas.SpriteFrame </ui-label>
             <ui-asset
@@ -58,6 +56,7 @@ const uiElements = {
         update () {
             this.$.spriteFrame.value = this.meta.userData.spriteFrameUuid;
             this.$.spriteFrame.disabled = this.assetInfo.readonly;
+            this.$.spriteFrame.invalid = this.getInvalid('spriteFrameUuid');
         },
     },
     itemWidth: {
@@ -67,6 +66,7 @@ const uiElements = {
         update () {
             this.$.itemWidth.value = this.meta.userData.itemWidth;
             this.$.itemWidth.disabled = this.assetInfo.readonly;
+            this.$.itemWidth.invalid = this.getInvalid('itemWidth');
         },
     },
     itemHeight: {
@@ -76,6 +76,7 @@ const uiElements = {
         update () {
             this.$.itemHeight.value = this.meta.userData.itemHeight;
             this.$.itemHeight.disabled = this.assetInfo.readonly;
+            this.$.itemHeight.invalid = this.getInvalid('itemHeight');
         },
     },
     startChar: {
@@ -85,26 +86,16 @@ const uiElements = {
         update () {
             this.$.startChar.value = this.meta.userData.startChar;
             this.$.startChar.disabled = this.assetInfo.readonly;
+            this.$.startChar.invalid = this.getInvalid('startChar');
         },
     },
     fontSize: {
-        ready () {
-            this.fontSize = this.$.fontSize;
-        },
         update () {
-            this.fontSize.value = this.meta.userData.fontSize;
+            this.$.fontSize.value = this.meta.userData.fontSize;
             this.$.fontSize.disabled = this.assetInfo.readonly;
+            this.$.fontSize.invalid = this.getInvalid('fontSize');
         },
     },
-    allContent: {
-        ready () {
-            this.allContent = this.$.allContent;
-        },
-        update () {
-            this.allContent.hidden = this.metas.length !== 1;
-        },
-    },
-
 };
 exports.$ = {
     spriteFrame: '#spriteFrame',
@@ -112,13 +103,17 @@ exports.$ = {
     itemHeight: '#itemHeight',
     startChar: '#startChar',
     fontSize: '#fontSize',
-    allContent: '#allContent',
 };
 exports.methods = {
     _onDataChanged (key, event) {
-        this.meta.userData[key] = event.target.value;
+        this.metas.forEach((meta) => {
+            meta.userData[key] = event.target.value;
+        });
         this.dispatch('change');
         exports.update(this.assetInfos, this.metas);
+    },
+    getInvalid (key, value) {
+        return !this.metas.every((meta) => meta.userData[key] === value);
     },
 };
 
