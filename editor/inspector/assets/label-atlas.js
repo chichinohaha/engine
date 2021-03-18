@@ -112,8 +112,8 @@ exports.methods = {
         this.dispatch('change');
         exports.update(this.assetInfos, this.metas);
     },
-    getInvalid (key, value) {
-        return !this.metas.every((meta) => meta.userData[key] === value);
+    getInvalid (key) {
+        return !this.metas.every((meta) => meta.userData[key] === this.meta.userData[key]);
     },
 };
 
