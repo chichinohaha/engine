@@ -18,4 +18,5 @@ module.exports = {
     'audio-clip': join(__dirname, './assets/audio-clip.js'),
     javascript: join(__dirname, './assets/javascript.js'),
     typescript: join(__dirname, './assets/typescript.js'),
+    skeleton: join(__dirname, './assets/skeleton.js'),
 };
