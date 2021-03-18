@@ -3,8 +3,58 @@ module.exports = {
         particle:{
             spriteFrameTip:'Sprite Frame'
         },
+        erpTextureCube: {
+            anisotropy: 'Anisotropy',
+            minFilter: 'Min Filter',
+            magFilter: 'Mag Filter',
+            mipFilter: 'Mip Filter',
+            wrapModeS: 'Wrap Mode S',
+            wrapModeT: 'Wrap Mode T',
+            anisotropyTip: 'Anisotropy',
+            minFilterTip: 'Min Filter',
+            magFilterTip: 'Mag Filter',
+            mipFilterTip: 'Mip Filter',
+            wrapModeSTip: 'Wrap Mode S',
+            wrapModeTTip: 'Wrap Mode T',
+            faceSize: {
+                name: 'Face Size',
+                title:
+                    'Size of each cube face. If not specified, or specified as 0, the default size, which is the nearest power of two to (image.width)/4, is used.',
+            },
+        },
+        javascript: {
+            plugin: 'Import As Plugin',
+            dependencies: 'Dependencies',
+            executionScope: 'Execution Scope',
+            global: 'Global',
+            enclosed: 'Enclosed',
+            executionScopeTip: 'Do not transpile or wrap this plugin script.',
+            loadPluginInWeb: 'Load In Web',
+            loadPluginInEditor: 'Load In Editor',
+            loadPluginInNative: 'Load In Native',
+            simulateGlobals: 'Simulate global variables',
+            pluginTip: 'Import As Plugin',
+            dependenciesTip: 'Dependencies',
+            globalTip: 'Global',
+            enclosedTip: 'Enclosed',
+            loadPluginInWebTip: 'Load In Web',
+            loadPluginInEditorTip: 'Load In Editor',
+            loadPluginInNativeTip: 'Load In Native',
+            simulateGlobalsTip: 'Simulate global variables',
+        },
         scene: {
             asyncLoadAssets: 'Async Load Assets',
+        },
+        effect: {
+            shader: 'Shaders',
+            shaderTip: 'Shaders',
+            combinations: 'Precompile Combinations',
+            combinationsTip: 'Precompile Combinations',
+            choose: 'Choose all possible branches.',
+            glsl3: 'GLSL 300 ES Output',
+            glsl1: 'GLSL 100 Output',
+            vert: 'Vertex Shader',
+            frag: 'Fragment Shader',
         },
         image: {
             type: 'Type',
@@ -61,7 +111,7 @@ module.exports = {
             wrapModeT: 'Wrap Mode T',
             wrapModeTTip: 'Wrap Mode T',
             modeWarn:
-                "Warning: WebGL 1.0 platform doesn't support 'repeat' filter for non-power-of-two textures(runtime fallback to 'clamp-to-edge'), effectively disabling features like the 'tilingOffset' property in many materials.",
+                'Warning: WebGL 1.0 platform doesn\'t support \'repeat\' filter for non-power-of-two textures(runtime fallback to \'clamp-to-edge\'), effectively disabling features like the \'tilingOffset\' property in many materials.',
         },
     },
 };

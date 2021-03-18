@@ -1,5 +1,7 @@
 'use strict';
 
+const path = require('path');
+
 exports.template = `
 <div class="asset-image">
     <ui-prop>
@@ -18,17 +20,30 @@ exports.template = `
         <ui-label slot="label" value="i18n:ENGINE.assets.image.useCompressTexture" tooltip="i18n:ENGINE.assets.image.useCompressTextureTip"></ui-label>
         <ui-checkbox slot="content" class="useCompressTexture-checkbox"></ui-checkbox>
     </ui-prop>
+
+    <ui-section expand>
+        <ui-label class="sub-panel-name" slot="header"></ui-label>
+        <ui-panel class="sub-panel"></ui-panel>
+    </ui-section>
 </div>
 `;
 
 exports.style = `
-    .asset-image {  }
-    .asset-image ui-prop {
+    .asset-image > ui-prop {
         margin: 4px 0;
+    }
+    .asset-image > ui-section {
+        margin: 4px 0;
+    }
+    .asset-image > ui-section > ui-panel {
+        margin-top: 5px;
     }
 `;
 
 exports.$ = {
+    panel: '.sub-panel',
+    panelName: '.sub-panel-name',
+
     container: '.asset-image',
     typeSelect: '.type-select',
     flipVerticalCheckbox: '.flipVertical-checkbox',
@@ -86,7 +101,7 @@ const Elements = {
             const panel = this;
 
             panel.$.flipVerticalCheckbox.value = panel._meta.userData.flipVertical;
-            
+
             panel.updateInvalid(panel.$.flipVerticalCheckbox, 'flipVertical');
             panel.updateReadonly(panel.$.flipVerticalCheckbox);
         },
@@ -133,7 +148,6 @@ const Elements = {
 
             panel.$.useCompressTextureCheckbox.value = panel._meta.userData.useCompressTexture;
 
-                            
             panel.updateInvalid(panel.$.useCompressTextureCheckbox, 'useCompressTexture');
             panel.updateReadonly(panel.$.useCompressTextureCheckbox);
         },
@@ -153,8 +167,12 @@ exports.update = function (assetList, metaList) {
 
     for (const prop in Elements) {
         const element = Elements[prop];
-        element.update.bind(this)();
+        if (element.update) {
+            element.update.call(this);
+        }
     }
+
+    this.updatePanel();
 };
 
 /**
@@ -163,7 +181,9 @@ exports.update = function (assetList, metaList) {
 exports.ready = function () {
     for (const prop in Elements) {
         const element = Elements[prop];
-        element.ready.bind(this)();
+        if (element.ready) {
+            element.ready.call(this);
+        }
     }
 };
 
@@ -186,5 +206,60 @@ exports.methods = {
         } else {
             element.removeAttribute('disabled');
         }
+    },
+
+    async updatePanel() {
+        this._subUUIDList = [];
+
+        this._assetList.forEach((asset) => {
+            if (!asset) {
+                return;
+            }
+
+            let validSUbUuid = null;
+
+            for (const subUuid in asset.subAssets) {
+                const subAsset = asset.subAssets[subUuid];
+
+                if (!subAsset || subAsset.importer === '*') {
+                    continue;
+                }
+
+                if (subAsset.importer === 'sprite-frame') {
+                    validSUbUuid = subUuid;
+                    break;
+                } else {
+                    validSUbUuid = subUuid;
+                }
+            }
+
+            if (validSUbUuid !== null) {
+                this._subUUIDList.push(`${asset.uuid}@${validSUbUuid}`);
+            }
+        });
+
+        if (!this._subUUIDList.length) {
+            return;
+        }
+
+        const assetList = await Promise.all(
+            this._subUUIDList.map((uuid) => {
+                return Editor.Message.request('asset-db', 'query-asset-info', uuid);
+            }),
+        );
+
+        const metaList = await Promise.all(
+            this._subUUIDList.map((uuid) => {
+                return Editor.Message.request('asset-db', 'query-asset-meta', uuid);
+            }),
+        );
+
+        const asset = assetList[0];
+        this.$.panelName.setAttribute('value', asset.importer);
+        this.$.panel.setAttribute('src', path.join(__dirname, `./${asset.importer}.js`));
+        this.$.panel.update(assetList, metaList);
+        this.$.panel.addEventListener('change', () => {
+            this.dispatch('change');
+        });
     },
 };

@@ -65,12 +65,6 @@ exports.template = `
             </ui-button>
         </ui-prop>
     </div>
-    <div class="preview">
-        <ui-image class="preview-image" show-alpha></ui-image>
-        <div class="preview-image-label">
-            <span class="preview-image-size"></span>
-        </div>
-    </div>
 </div>
 `;
 
@@ -91,32 +85,6 @@ exports.style = `
         text-align: center;
         margin-top: 10px;
     }
-    .asset-sprite-frame > .preview {
-        height: 200px;
-        background: var(--color-normal-fill-emphasis);
-        border: 1px solid var(--color-normal-border-emphasis);
-        display: flex;
-        padding: 10px;
-        position: relative;
-    }
-    .asset-sprite-frame > .preview > .preview-image {
-        width: 100%;
-        height: 100%;
-    }
-    .asset-sprite-frame > .preview > .preview-image-label {
-        position: absolute;
-        width: 100%;
-        left: 0;
-        bottom: 4px;
-        text-align: center;
-    }
-    .asset-sprite-frame > .preview > .preview-image-label > .preview-image-size {
-        font-size: 10px;
-        padding: 2px 8px;
-        background-color: var(--color-primary-fill);
-        color: var(--color-primary-contrast-weakest);
-        border-radius: calc(var(--size-normal-radius) * 1px);
-    }
 `;
 
 exports.$ = {
@@ -136,8 +104,6 @@ exports.$ = {
     borderLeftInput: '.borderLeft-input',
     borderRightInput: '.borderRight-input',
     editButton: '.edit-button',
-    image: '.preview-image',
-    imageSize: '.preview-image-size',
 };
 
 /**
@@ -234,7 +200,9 @@ const Elements = {
                 // 其他项有依赖它的更新，数量较多，所以用了整体 update 一次
                 for (const prop in Elements) {
                     const element = Elements[prop];
-                    element.update.bind(this)();
+                    if (element.update) {
+                        element.update.bind(this)();
+                    }
                 }
             });
         },
@@ -446,25 +414,22 @@ const Elements = {
         ready() {
             const panel = this;
 
-            this.$.editButton.addEventListener('change', (event) => {
-                // TODO: 打开九宫格编辑器
-        
+            panel.$.editButton.addEventListener('change', (event) => {
                 event.stopPropagation();
+
+                Editor.Panel.open('inspector.sprite-editor', {
+                    asset: panel._asset,
+                    meta: panel._meta,
+                });
             });
+
+            this._updateFromBroadcast = this.updateFromBroadcast.bind(panel);
+            Editor.Message.addBroadcastListener('sprite-editor:changed', panel._updateFromBroadcast);
         },
-    },
-    imagePreview: {
-        ready() {
+        close() {
             const panel = this;
 
-            this.$.image.$img.addEventListener('load', () => {
-                this.$.imageSize.innerHTML = `${this.$.image.$img.naturalWidth} x ${this.$.image.$img.naturalHeight}`;
-            });
-        },
-        update() {
-            const panel = this;
-
-            this.$.image.value = this._asset.uuid;
+            Editor.Message.removeBroadcastListener('sprite-editor:changed', panel._updateFromBroadcast);
         },
     },
 };
@@ -500,6 +465,15 @@ exports.ready = function () {
     }
 };
 
+exports.close = function () {
+    for (const prop in Elements) {
+        const element = Elements[prop];
+        if (element.close) {
+            element.close.bind(this)();
+        }
+    }
+};
+
 exports.methods = {
     /**
      * 更新多选状态下某个数据是否可编辑
@@ -530,6 +504,28 @@ exports.methods = {
             element.setAttribute('disabled', true);
         } else {
             element.removeAttribute('disabled');
+        }
+    },
+    /**
+     * 来自九宫格编辑面板的数据更新
+     */
+    updateFromBroadcast(data) {
+        const panel = this;
+
+        if (data.uuid === panel._meta.uuid) {
+            for (const prop in data.userData) {
+                panel._metaList.forEach((meta) => {
+                    meta.userData[prop] = data.userData[prop];
+                });
+            }
+            panel.dispatch('change');
+        }
+
+        for (const prop in Elements) {
+            const element = Elements[prop];
+            if (element.update) {
+                element.update.bind(panel)();
+            }
         }
     },
 };
