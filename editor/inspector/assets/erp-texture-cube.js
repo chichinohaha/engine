@@ -1,11 +1,9 @@
 exports.template = `
 <section class="asset-texture">
-    <div class="content"        
-        id="all-content"
-    >
+    <div class="content">
         <ui-prop>
             <span slot="label">
-                <ui-label tooltip="i18n:ENGINE.assets.erpTextureCube.AnisotropyTip">Anisotropy</ui-label>
+                <ui-label tooltip="i18n:ENGINE.assets.erpTextureCube.anisotropyTip" i18n>ENGINE.assets.erpTextureCube.anisotropy</ui-label>
                 <ui-icon value="lock"></ui-icon>
             </span>
             <ui-num-input slot="content"    
@@ -14,8 +12,9 @@ exports.template = `
         </ui-prop>
         <ui-prop>
             <span slot="label">
-                <ui-label tooltip="i18n:ENGINE.assets.erpTextureCube.facesize.title"
-                >Face Size</ui-label>
+                <ui-label tooltip="i18n:ENGINE.assets.erpTextureCube.faceSize.title" 
+                    i18n
+                >ENGINE.assets.erpTextureCube.faceSize.name</ui-label>
                 <ui-icon value="lock"></ui-icon>
             </span>
             <ui-num-input slot="content"    
@@ -24,7 +23,7 @@ exports.template = `
         </ui-prop>
         <ui-prop>
             <span slot="label">
-                <ui-label tooltip="i18n:ENGINE.assets.erpTextureCube.MinFilterTip">Min Filter</ui-label>
+                <ui-label tooltip="i18n:ENGINE.assets.erpTextureCube.minFilterTip" i18n>ENGINE.assets.erpTextureCube.minFilter</ui-label>
                 <ui-icon value="lock"></ui-icon>
             </span>
             <ui-select slot="content"
@@ -36,7 +35,7 @@ exports.template = `
         </ui-prop>
         <ui-prop>
             <span slot="label">
-                <ui-label tooltip="i18n:ENGINE.assets.erpTextureCube.MagFilterTip">Mag Filter</ui-label>
+                <ui-label tooltip="i18n:ENGINE.assets.erpTextureCube.magFilterTip" i18n>ENGINE.assets.erpTextureCube.magFilter</ui-label>
                 <ui-icon value="lock"></ui-icon>
             </span>
             <ui-select slot="content"
@@ -48,7 +47,7 @@ exports.template = `
         </ui-prop>
         <ui-prop>
             <span slot="label">
-                <ui-label tooltip="i18n:ENGINE.assets.erpTextureCube.MipFilterTip">Mip Filter</ui-label>
+                <ui-label tooltip="i18n:ENGINE.assets.erpTextureCube.mipFilterTip" i18n>ENGINE.assets.erpTextureCube.mipFilter</ui-label>
                 <ui-icon value="lock"></ui-icon>
             </span>
             <ui-select slot="content"
@@ -61,7 +60,7 @@ exports.template = `
         </ui-prop>
         <ui-prop>
             <span slot="label">
-                <ui-label tooltip="i18n:ENGINE.assets.erpTextureCube.WrapModeSTip">Wrap Mode S</ui-label>
+                <ui-label tooltip="i18n:ENGINE.assets.erpTextureCube.wrapModeSTip" i18n>ENGINE.assets.erpTextureCube.wrapModeS</ui-label>
                 <ui-icon value="lock"></ui-icon>
             </span>
             <ui-select slot="content"
@@ -74,7 +73,7 @@ exports.template = `
         </ui-prop>
         <ui-prop>
             <span slot="label">
-                <ui-label tooltip="i18n:ENGINE.assets.erpTextureCube.WrapModeTTip">Wrap Mode T</ui-label>
+                <ui-label tooltip="i18n:ENGINE.assets.erpTextureCube.wrapModeTTip" i18n>ENGINE.assets.erpTextureCube.wrapModeT</ui-label>
                 <ui-icon value="lock" ></ui-icon>
             </span>
             <ui-select slot="content"
@@ -167,16 +166,10 @@ exports.style = `
     text-align: center;
     margin-top: 10px;
 }
-.asset-texture > .content > .warn-words {
-    margin-top: 20px;
-    margin-bottom: 20px;
-    line-height: 1.7;
-    color: var(--color-warn-fill);
-}
+
 `;
 
 exports.$ = {
-    allContent: '#all-content',
     anisotropy: '#anisotropy',
     faceSize: '#faceSize',
     minfilter: '#minfilter',
@@ -207,11 +200,7 @@ exports.update = function (assetList, metaList) {
 };
 
 const uiElements = {
-    allContent: {
-        update () {
-            this.$.allContent.hidden = !this.meta;
-        },
-    },
+
     lockIcons: {
         ready () {
             this.lockIcons = this.$this.shadowRoot.querySelectorAll('ui-icon[value="lock"]');
@@ -298,7 +287,7 @@ const uiElements = {
 
 exports.methods = {
     /**
-     * 检查多选状态下某个数据是否无效
+     * Checks whether a data is invalid in the multiple - selected state
      * @param key
      */
     getInvalid (key) {

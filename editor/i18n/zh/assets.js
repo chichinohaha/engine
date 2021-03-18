@@ -1,15 +1,21 @@
 module.exports = {
     assets: {
         erpTextureCube: {
-            AnisotropyTip: 'Anisotropy',
-            MinFilterTip: 'Min Filter',
-            MagFilterTip: 'Mag Filter',
-            MipFilterTip: 'Mip Filter',
-            WrapModeSTip: 'Wrap Mode S',
-            WrapModeTTip: 'Wrap Mode T',
-            facesize: {
-                name: '',
-                facesize:
+            anisotropy: 'Anisotropy',
+            minFilter: 'Min Filter',
+            magFilter: 'Mag Filter',
+            mipFilter: 'Mip Filter',
+            wrapModeS: 'Wrap Mode S',
+            wrapModeT: 'Wrap Mode T',
+            anisotropyTip: 'Anisotropy',
+            minFilterTip: 'Min Filter',
+            magFilterTip: 'Mag Filter',
+            mipFilterTip: 'Mip Filter',
+            wrapModeSTip: 'Wrap Mode S',
+            wrapModeTTip: 'Wrap Mode T',
+            faceSize: {
+                name: 'Face Size',
+                title:
                     '每个面的尺寸。如果未指定或指定为0，将使用默认尺寸——最接近贴图宽度 / 4 的2次幂。',
             },
         },
