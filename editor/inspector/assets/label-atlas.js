@@ -110,7 +110,6 @@ exports.methods = {
             meta.userData[key] = event.target.value;
         });
         this.dispatch('change');
-        exports.update(this.assetInfos, this.metas);
     },
     getInvalid (key) {
         return !this.metas.every((meta) => meta.userData[key] === this.meta.userData[key]);
