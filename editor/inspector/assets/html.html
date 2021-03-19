@@ -1,0 +1,35 @@
+<section class="asset-render-pipeline"
+    id="allContent"   
+>
+    <div class="header">
+        <ui-prop>
+            <ui-label slot="label">Pipelines</ui-label>
+            <ui-select slot="content"
+                id="pipelines"
+                :disabled="readonly.value"
+                :value="pipelineIndex"
+                @confirm="pipelineIndex = $event.target.value"
+            >
+                <option
+                    v-for="(pipeline, index) in pipelines"
+                    :key="index + ' - ' + pipeline.name"
+                    :value="index"
+                >{{pipeline.name}}</option>
+            </ui-select>
+        </ui-prop>
+    </div>
+
+    <div class="content">
+        <div
+            id="pipelineContent"
+            v-for="item in pipeline.value"
+        >
+            <ins-prop auto="true"
+                :readonly="readonly.value"
+                :dump="item"
+                :dumps="[item]"
+            ></ins-prop>
+        </div>
+    </div>
+
+</section>
