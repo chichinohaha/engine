@@ -110,7 +110,7 @@ exports.style = `
     text-align: center;
     margin-top: 10px;
   }
-  .asset-texture > .content > .warn-words {
+  .asset-texture > .content > ui-prop > .warn-words {
     margin-top: 20px;
     margin-bottom: 20px;
     line-height: 1.7;
@@ -538,7 +538,8 @@ const uiElements = {
     },
     warnWords: {
         update () {
-            this.$.warnWords.hidden = !(this.isUnlegalWrapModeT || this.isUnlegalWrapModeS);
+            const isHidden = !(this.isUnlegalWrapModeT || this.isUnlegalWrapModeS);
+            this.$.warnWords.style = isHidden ? 'display:none' : '';
         },
     },
     allContent: {
