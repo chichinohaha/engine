@@ -27,3 +27,26 @@ exports.sortProp = function (propMap) {
 
     return orderList.concat(normalList);
 };
+
+/**
+ *
+ * @param {string[]} excludeList
+ * @param {object} dump
+ * @param {(element)=>void} onElementCreated
+ */
+exports.getCustomPropElements = function (excludeList, dump, onElementCreated) {
+    const customPropElements = [];
+    const sortedProp = exports.sortProp(dump.value);
+    sortedProp.forEach((prop) => {
+        if (!excludeList.includes(prop.key)) {
+            const node = document.createElement('ui-prop');
+            node.setAttribute('type', 'dump');
+            if (typeof onElementCreated === 'function') {
+                onElementCreated(node);
+            }
+            node.render(prop.dump);
+            customPropElements.push(node);
+        }
+    });
+    return customPropElements;
+};
