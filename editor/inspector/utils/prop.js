@@ -4,7 +4,7 @@
  * @param {*} value of dump
  * @returns {key:string dump:object}[]
  */
-exports.shortProp = function (propMap) {
+exports.sortProp = function (propMap) {
     const orderList = [];
     const normalList = [];
 
