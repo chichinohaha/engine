@@ -1,10 +1,8 @@
-'use strict';
+/* eslint-disable @typescript-eslint/no-misused-promises */
+const GlPreview = Editor._Module.require('PreviewExtends').default;
+const glPreview = new GlPreview('scene:skeleton-preview', 'query-skeleton-preview-data');
 
-const ElectronModule = require('@base/electron-module');
-const GlPreview = ElectronModule.require('PreviewExtends').default;
-let glPreview = new GlPreview('scene:skeleton-preview', 'query-skeleton-preview-data');
-
-export const style = `
+exports.style = `
 .asset-skeleton {
     flex: 1;
     display: flex;
@@ -39,44 +37,31 @@ export const style = `
 }
 `;
 
-export const template = `
+exports.template = `
 <section class="asset-skeleton">
     <section></section>
     <footer>
         <div class="preview-info">
-            <ui-label value="JointCount:0" ref="jointCountLabel"></ui-label>
+            <ui-label value="JointCount:0" id="jointCountLabel"></ui-label>
         </div>
-        <div class="imageDiv" ref="imageDiv">
-            <canvas class="image" ref="image"
+        <div class="imageDiv" id="imageDiv">
+            <canvas class="image" id="image"
                 @mousedown=onPreviewMouseDown($event)
             ></canvas>
         </div>
     </footer>
 </section>
 `;
+exports.$ = {
+    imageDiv: '#imageDiv',
+    image: '#image',
+    jointCountLabel: '#jointCountLabel',
+};
+const previewConfig = {};
 
-export const props = [
-    'info',
-];
-
-interface IPreviewConfig {
-    width?: number;
-    height?: number;
-}
-const previewConfig: IPreviewConfig = {};
-
-export const methods = {
-    refresh() {
-      
-
-        this.isPreviewDataDirty = true;
-        this.initPreview();
-    },
-
-    async initPreview() {
-
-
-        if (!this.$refs.image) {
+exports.methods = {
+    async initPreview () {
+        if (!this.$.image) {
             return;
         }
 
@@ -84,26 +69,25 @@ export const methods = {
             return;
         }
 
-        await glPreview.init({ width: this.$refs.image.clientWidth, height: this.$refs.image.clientHeight });
+        await glPreview.init({ width: this.$.image.clientWidth, height: this.$.image.clientHeight });
         await Editor.Message.request('scene', 'set-skeleton-preview-skeleton', this.info.uuid);
 
-        if (!this.$refs.image) {
+        if (!this.$.image) {
             return;
         }
-        glPreview.initGL(this.$refs.image, { width: this.$refs.image.clientWidth, height: this.$refs.image.clientHeight });
-        previewConfig.width = this.$refs.image.clientWidth;
-        previewConfig.height = this.$refs.image.clientHeight;
+        glPreview.initGL(this.$.image, { width: this.$.image.clientWidth, height: this.$.image.clientHeight });
+        previewConfig.width = this.$.image.clientWidth;
+        previewConfig.height = this.$.image.clientHeight;
         if (this.updateTask) {
             cancelAnimationFrame(this.updateTask);
             this.updateTask = null;
         }
 
-        this.update();
+        await this.update();
     },
 
-    async update() {
-
-        const canvas = this.$refs.image;
+    async update () {
+        const canvas = this.$.image;
         if (!this || !canvas) {
             this.updateTask = null;
             return;
@@ -111,10 +95,10 @@ export const methods = {
 
         if (this.isPreviewDataDirty) {
             // 必须要设置 canvas的宽高
-            canvas.width = this.$refs.imageDiv.clientWidth;
-            canvas.height = this.$refs.imageDiv.clientHeight;
+            canvas.width = this.$.imageDiv.clientWidth;
+            canvas.height = this.$.imageDiv.clientHeight;
 
-            const info: any = await glPreview.queryPreviewData({ width: this.$refs.imageDiv.clientWidth, height: this.$refs.imageDiv.clientHeight });
+            const info = await glPreview.queryPreviewData({ width: this.$.imageDiv.clientWidth, height: this.$.imageDiv.clientHeight });
 
             if (info.width !== previewConfig.width || info.height !== previewConfig.height) {
                 glPreview.resizeGL(info.width, info.height);
@@ -132,9 +116,9 @@ export const methods = {
         this.updateTask = requestAnimationFrame(async () => { await this.update(); });
     },
 
-    onPreviewMouseDown(event: MouseEvent) {
+    onPreviewMouseDown (event) {
         Editor.Message.request('scene', 'on-skeleton-preview-mouse-down', { x: event.x, y: event.y });
-      
+
         event.target.requestPointerLock();
         document.addEventListener('mousemove', this.onPreviewMouseMove);
         document.addEventListener('mouseup', this.onPreviewMouseUp);
@@ -142,13 +126,13 @@ export const methods = {
         this.isPreviewDataDirty = true;
     },
 
-    onPreviewMouseMove(event: MouseEvent) {
+    onPreviewMouseMove (event) {
         Editor.Message.request('scene', 'on-skeleton-preview-mouse-move', { movementX: event.movementX, movementY: event.movementY });
 
         this.isPreviewDataDirty = true;
     },
 
-    onPreviewMouseUp(event: MouseEvent) {
+    onPreviewMouseUp (event) {
         Editor.Message.request('scene', 'on-skeleton-preview-mouse-up', { x: event.x, y: event.y });
         document.exitPointerLock();
         document.removeEventListener('mousemove', this.onPreviewMouseMove);
@@ -157,45 +141,27 @@ export const methods = {
         this.isPreviewDataDirty = true;
     },
 
-    updateSkeletonInfo(skeletonInfo: {jointCount: number}) {
-
-        if (this.$refs.jointCountLabel) {
-            this.$refs.jointCountLabel.value = "JointCount:" + skeletonInfo.jointCount;
+    updateSkeletonInfo (skeletonInfo) {
+        if (this.$.jointCountLabel) {
+            this.$.jointCountLabel.value = `JointCount:${skeletonInfo.jointCount}`;
         }
         this.isPreviewDataDirty = true;
     },
 };
 
-export const watch = {
-    info() {
-
-        this.readonly.value = this.info && this.info.readonly;
-        this.refresh();
-    },
+exports.ready = function () {
+    this.$.image.addEventListener('mousedown', this.onPreviewMouseDown.bind(this));
+    this.isPreviewDataDirty = true;
+    this.initPreview();
+    Editor.Message.addBroadcastListener('scene:skeleton-preview-skeleton-info', this.updateSkeletonInfo);
 };
 
-export function data() {
-    return {
-        meta: null,
-        readonly: {
-            value: true,
-        },
-        isPreviewDataDirty: true,
-    };
-}
-
-export function mounted() {
-  
-    const this: any = this;
-    this.info = this.infos[0];
-    this.meta = this.metas[0];
-    this.refresh();
-    Editor.Message.addBroadcastListener('scene:skeleton-preview-skeleton-info', this.updateSkeletonInfo);
-}
-
-export function destroyed() {
-  
-    const this: any = this;
+exports.destroyed = function () {
     Editor.Message.removeBroadcastListener('scene:skeleton-preview-skeleton-info', this.updateSkeletonInfo);
     Editor.Message.request('scene', 'hide-skeleton-preview');
-}
+};
+exports.update = function (assetList, metaList) {
+    this.info = assetList[0];
+    this.isPreviewDataDirty = true;
+    this.initPreview();
+};
