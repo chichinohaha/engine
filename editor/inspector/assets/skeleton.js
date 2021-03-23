@@ -153,11 +153,11 @@ exports.ready = function () {
     this.$.image.addEventListener('mousedown', this.onPreviewMouseDown.bind(this));
     this.isPreviewDataDirty = true;
     this.initPreview();
-    Editor.Message.addBroadcastListener('scene:skeleton-preview-skeleton-info', this.updateSkeletonInfo);
+    Editor.Message.addBroadcastListener('scene:skeleton-preview-skeleton-info', this.updateSkeletonInfo.bind(this));
 };
 
 exports.destroyed = function () {
-    Editor.Message.removeBroadcastListener('scene:skeleton-preview-skeleton-info', this.updateSkeletonInfo);
+    Editor.Message.removeBroadcastListener('scene:skeleton-preview-skeleton-info', this.updateSkeletonInfo.bind(this));
     Editor.Message.request('scene', 'hide-skeleton-preview');
 };
 exports.update = function (assetList, metaList) {
