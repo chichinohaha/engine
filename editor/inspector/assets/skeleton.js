@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-this-alias */
 /* eslint-disable @typescript-eslint/no-misused-promises */
 const GlPreview = Editor._Module.require('PreviewExtends').default;
 const glPreview = new GlPreview('scene:skeleton-preview', 'query-skeleton-preview-data');
@@ -78,90 +79,69 @@ exports.methods = {
         glPreview.initGL(this.$.image, { width: this.$.image.clientWidth, height: this.$.image.clientHeight });
         previewConfig.width = this.$.image.clientWidth;
         previewConfig.height = this.$.image.clientHeight;
-        if (this.updateTask) {
-            cancelAnimationFrame(this.updateTask);
-            this.updateTask = null;
-        }
 
         await this.update();
     },
 
     async update () {
         const canvas = this.$.image;
-        if (!this || !canvas) {
-            this.updateTask = null;
-            return;
+        // 必须要设置 canvas的宽高
+        canvas.width = this.$.imageDiv.clientWidth;
+        canvas.height = this.$.imageDiv.clientHeight;
+
+        const info = await glPreview.queryPreviewData({ width: this.$.imageDiv.clientWidth, height: this.$.imageDiv.clientHeight });
+
+        if (info.width !== previewConfig.width || info.height !== previewConfig.height) {
+            glPreview.resizeGL(info.width, info.height);
+            previewConfig.width = info.width;
+            previewConfig.height = info.height;
         }
-
-        if (this.isPreviewDataDirty) {
-            // 必须要设置 canvas的宽高
-            canvas.width = this.$.imageDiv.clientWidth;
-            canvas.height = this.$.imageDiv.clientHeight;
-
-            const info = await glPreview.queryPreviewData({ width: this.$.imageDiv.clientWidth, height: this.$.imageDiv.clientHeight });
-
-            if (info.width !== previewConfig.width || info.height !== previewConfig.height) {
-                glPreview.resizeGL(info.width, info.height);
-                previewConfig.width = info.width;
-                previewConfig.height = info.height;
-            }
-            try {
-                glPreview.drawGL(info.buffer, info.width, info.height);
-            } catch (e) {
-                console.warn(e);
-            }
-            this.isPreviewDataDirty = false;
+        try {
+            glPreview.drawGL(info.buffer, info.width, info.height);
+        } catch (e) {
+            console.warn(e);
         }
-
-        this.updateTask = requestAnimationFrame(async () => { await this.update(); });
     },
 
     onPreviewMouseDown (event) {
         Editor.Message.request('scene', 'on-skeleton-preview-mouse-down', { x: event.x, y: event.y });
 
         event.target.requestPointerLock();
-        document.addEventListener('mousemove', this.onPreviewMouseMove);
-        document.addEventListener('mouseup', this.onPreviewMouseUp);
-
-        this.isPreviewDataDirty = true;
+        document.addEventListener('mousemove', this.onPreviewMouseMove.bind(this));
+        document.addEventListener('mouseup', this.onPreviewMouseUp.bind(this));
     },
 
-    onPreviewMouseMove (event) {
+    async onPreviewMouseMove (event) {
         Editor.Message.request('scene', 'on-skeleton-preview-mouse-move', { movementX: event.movementX, movementY: event.movementY });
-
-        this.isPreviewDataDirty = true;
+        await this.update();
     },
 
-    onPreviewMouseUp (event) {
+    async onPreviewMouseUp (event) {
         Editor.Message.request('scene', 'on-skeleton-preview-mouse-up', { x: event.x, y: event.y });
         document.exitPointerLock();
-        document.removeEventListener('mousemove', this.onPreviewMouseMove);
-        document.removeEventListener('mouseup', this.onPreviewMouseUp);
-
-        this.isPreviewDataDirty = true;
+        document.removeEventListener('mousemove', this.onPreviewMouseMove.bind(this));
+        document.removeEventListener('mouseup', this.onPreviewMouseUp.bind(this));
+        await this.update();
     },
 
     updateSkeletonInfo (skeletonInfo) {
         if (this.$.jointCountLabel) {
             this.$.jointCountLabel.value = `JointCount:${skeletonInfo.jointCount}`;
         }
-        this.isPreviewDataDirty = true;
     },
 };
 
 exports.ready = function () {
+    this.updateInfoFunc = this.updateSkeletonInfo.bind(this);
     this.$.image.addEventListener('mousedown', this.onPreviewMouseDown.bind(this));
-    this.isPreviewDataDirty = true;
-    this.initPreview();
-    Editor.Message.addBroadcastListener('scene:skeleton-preview-skeleton-info', this.updateSkeletonInfo.bind(this));
+    Editor.Message.addBroadcastListener('scene:skeleton-preview-skeleton-info', this.updateInfoFunc);
 };
 
-exports.destroyed = function () {
-    Editor.Message.removeBroadcastListener('scene:skeleton-preview-skeleton-info', this.updateSkeletonInfo.bind(this));
+exports.close = function () {
+    Editor.Message.removeBroadcastListener('scene:skeleton-preview-skeleton-info', this.updateInfoFunc);
     Editor.Message.request('scene', 'hide-skeleton-preview');
 };
 exports.update = function (assetList, metaList) {
     this.info = assetList[0];
-    this.isPreviewDataDirty = true;
     this.initPreview();
 };
