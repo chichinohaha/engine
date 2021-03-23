@@ -32,7 +32,7 @@ exports.sortProp = function (propMap) {
  *
  * @param {string[]} excludeList
  * @param {object} dump
- * @param {(element)=>void} onElementCreated
+ * @param {(element,prop)=>void} onElementCreated
  */
 exports.getCustomPropElements = function (excludeList, dump, onElementCreated) {
     const customPropElements = [];
@@ -42,7 +42,7 @@ exports.getCustomPropElements = function (excludeList, dump, onElementCreated) {
             const node = document.createElement('ui-prop');
             node.setAttribute('type', 'dump');
             if (typeof onElementCreated === 'function') {
-                onElementCreated(node);
+                onElementCreated(node, prop);
             }
             node.render(prop.dump);
             customPropElements.push(node);
