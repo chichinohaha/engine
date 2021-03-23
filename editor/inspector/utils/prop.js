@@ -44,7 +44,6 @@ exports.getCustomPropElements = function (excludeList, dump, onElementCreated) {
             if (typeof onElementCreated === 'function') {
                 onElementCreated(node, prop);
             }
-            node.render(prop.dump);
             customPropElements.push(node);
         }
     });
