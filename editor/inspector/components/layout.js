@@ -139,7 +139,7 @@ exports.template = `
 <!-- Render other data that is not taken over -->
 <div id="customProps"></div>
 </div>
-`
+`;
 const uiElements = {
     baseProps: {
         ready () {
@@ -155,11 +155,11 @@ const uiElements = {
                 uiElements.baseProps.ready.call(this);
             }
             const judge = (lvalue, rvalue, isequal = true) => {
-                let result = this.dump.value[lvalue].value == rvalue;
                 if (!isequal) {
-                    result = !result;
+                    return this.dump.value[lvalue].value != rvalue && (this.dump.values.length === 1 || this.dump.values.every((item) => item.value[lvalue].value != rvalue));
+                } else {
+                    return this.dump.value[lvalue].value == rvalue && (this.dump.values.length === 1 || this.dump.values.every((item) => item.value[lvalue].value == rvalue));
                 }
-                return result && (this.dump.values.length === 1 || this.dump.values.every((item) => item.value[lvalue].value == rvalue));
             };
             this.$.baseProps.forEach((element) => {
                 const key = element.getAttribute('key');
