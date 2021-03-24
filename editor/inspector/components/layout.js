@@ -1,7 +1,4 @@
 /* eslint-disable @typescript-eslint/restrict-template-expressions */
-
-const { readFileSync } = require('fs-extra');
-const { join } = require('path');
 const propUtils = require('../utils/prop');
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 const excludeList = [
@@ -11,10 +8,138 @@ const excludeList = [
     'alignVertical', 'paddingTop', 'paddingBottom',
     'startAxis', 'constraint', 'constraintNum', 'affectedByScale',
 ];
-exports.style = `
+exports.template = `
+<div class="layout-component">
+    <ui-prop
+        type="dump"
+        key="type"
+    ></ui-prop>
+    <ui-prop
+        type="dump"
+        key="resizeMode"
+    ></ui-prop>
+    <ui-prop
+        type="dump"
+        key="cellSize"
+        showflag="resizeMode2"
+    ></ui-prop>
+    <ui-prop
+        type="dump"
+        showflag="type1"
+        key="alignHorizontal"
+    ></ui-prop>
+    <ui-prop
+        type="dump"
+        showflag="type1"
+        key="paddingLeft"
+    ></ui-prop>
+    <ui-prop
+        type="dump"
+        showflag="type1"
+        key="paddingRight"
+    ></ui-prop>
+    <ui-prop
+        type="dump"
+        showflag="type1"
+        key="spacingX"
+    ></ui-prop>
+    <ui-prop
+        type="dump"
+        showflag="type1"
+        key="horizontalDirection"
+    ></ui-prop>
 
-`;
-exports.template = readFileSync(join(__dirname, './html.html'));
+    <ui-prop
+        type="dump"
+        showflag="type2"
+        key="alignVertical"
+    ></ui-prop>
+    <ui-prop
+        type="dump"
+        showflag="type2"
+        key="paddingTop"
+    ></ui-prop>
+    <ui-prop
+        type="dump"
+        showflag="type2"
+        key="paddingBottom"
+    ></ui-prop>
+    <ui-prop
+        type="dump"
+        showflag="type2"
+        key="spacingY"
+    ></ui-prop>
+    <ui-prop
+        type="dump"
+        showflag="type2"
+        key="verticalDirection"
+    ></ui-prop>
+    <ui-prop
+        type="dump"
+        showflag="type3"
+        key="startAxis"
+    ></ui-prop>
+    <ui-prop
+        type="dump"
+        showflag="type3"
+        key="paddingTop"
+    ></ui-prop>
+    <ui-prop
+        type="dump"
+        showflag="type3"
+        key="paddingBottom"
+    ></ui-prop>
+    <ui-prop
+        type="dump"
+        showflag="type3"
+        key="paddingLeft"
+    ></ui-prop>
+    <ui-prop
+        type="dump"
+        showflag="type3"
+        key="paddingRight"
+    ></ui-prop>
+    <ui-prop
+        type="dump"
+        showflag="type3"
+        key="spacingX"
+    ></ui-prop>
+    <ui-prop
+        type="dump"
+        showflag="type3"
+        key="spacingY"
+    ></ui-prop>
+    <ui-prop
+        type="dump"
+        showflag="type3"
+        key="verticalDirection"
+    ></ui-prop>
+    <ui-prop
+        type="dump"
+        showflag="type3"
+        key="horizontalDirection"
+    ></ui-prop>
+    <ui-prop
+        type="dump"
+        showflag="type3"
+        key="constraint"
+    ></ui-prop>
+    <ui-prop
+        type="dump"
+        showflag="type3"
+        key="constraintNum"
+    ></ui-prop>
+</div>
+<ui-prop
+    type="dump"
+    showflag="typeNot0"
+    key="affectedByScale"
+></ui-prop>
+
+<!-- Render other data that is not taken over -->
+<div id="customProps"></div>
+</div>
+`
 const uiElements = {
     baseProps: {
         ready () {
@@ -29,22 +154,38 @@ const uiElements = {
             if (!this.$.baseProps) {
                 uiElements.baseProps.ready.call(this);
             }
+            const judge = (lvalue, rvalue, isequal = true) => {
+                let result = this.dump.value[lvalue].value == rvalue;
+                if (!isequal) {
+                    result = !result;
+                }
+                return result && (this.dump.values.length === 1 || this.dump.values.every((item) => item.value[lvalue].value == rvalue));
+            };
             this.$.baseProps.forEach((element) => {
-                // v-if="dump.value.resizeMode.value === 2 && (!dumps || dumps.every(item => item.value.resizeMode.value == 2))"
-                const key = element.id;
+                const key = element.getAttribute('key');
+
                 let isShow = this.dump.value[key].visible;
+
                 if (element.hasAttribute('showflag')) {
                     const str = element.getAttribute('showflag');
-                    const equalJudgeStrPair = str.split('==');
-                    const unequalJudgeStrPair = str.split('!=');
-                    if (equalJudgeStrPair.length == 2) {
-                        const left = equalJudgeStrPair[0];
-                        const right = equalJudgeStrPair[1];
-                        isShow = isShow && (this.dump.value[left].value == right && (this.dump.values.length === 1 || this.dump.values.every((item) =>  item.value[key].value == right)));
-                    } else if (unequalJudgeStrPair.length == 2) {
-                        const left = unequalJudgeStrPair[0];
-                        const right = unequalJudgeStrPair[1];
-                        isShow = isShow && !(this.dump.value[left].value == right && (this.dump.values.length === 1 || this.dump.values.every((item) =>  item.value[key].value == right)));
+                    switch (str) {
+                    case 'resizeMode2':
+                        isShow = isShow && judge('resizeMode', 2);
+                        break;
+                    case 'type1':
+                        isShow = isShow && judge('type', 1);
+                        break;
+                    case 'type2':
+                        isShow = isShow && judge('type', 2);
+                        break;
+                    case 'type3':
+                        isShow = isShow && judge('type', 3);
+                        break;
+                    case 'typeNot0':
+                        isShow = isShow && judge('type', 0, false);
+                        break;
+                    default:
+                        break;
                     }
                 }
                 if (isShow) {
