@@ -30,6 +30,7 @@ exports.sortProp = function (propMap) {
 
 /**
  *
+ * This function can filter the contents of the dump and is mainly used to get the user's dump data
  * @param {string[]} excludeList
  * @param {object} dump
  * @param {(element,prop)=>void} onElementCreated
