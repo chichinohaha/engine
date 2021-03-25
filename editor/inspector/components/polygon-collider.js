@@ -44,11 +44,6 @@ const uiElements = {
     baseProps: {
         ready () {
             this.$.baseProps = this.$this.querySelectorAll('ui-prop:not(.customProp)');
-            this.$.baseProps.forEach((element) => {
-                element.addEventListener('change-dump', () => {
-                    uiElements.baseProps.update.call(this);
-                });
-            });
         },
         update () {
             if (!this.$.baseProps) {
