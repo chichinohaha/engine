@@ -9,64 +9,48 @@ exports.template = `
 <div class="page-view-component">
     <ui-prop type="dump"
         key="content"
-        
     ></ui-prop>
     <ui-prop type="dump"
         key="sizeMode"
-        
     ></ui-prop>
     <ui-prop type="dump"
         key="direction"
-        
     ></ui-prop>
     <ui-prop type="dump"
         key="scrollThreshold"
-        
     ></ui-prop>
     <ui-prop type="dump"
         key="autoPageTurningThreshold"
-        
     ></ui-prop>
     <ui-prop type="dump"
         key="inertia"
-        
     ></ui-prop>
     <ui-prop type="dump"
         key="brake"
-        
     ></ui-prop>
     <ui-prop type="dump"
         key="elastic"
-        
     ></ui-prop>
     <ui-prop type="dump"
         key="bounceDuration"
-        
     ></ui-prop>
     <ui-prop type="dump"
         key="indicator"
-        
     ></ui-prop>
     <ui-prop type="dump"
         key="pageTurningSpeed"
-        
     ></ui-prop>
     <ui-prop type="dump"
         key="pageTurningEventTiming"
-        
     ></ui-prop>
     <ui-prop type="dump"
         key="pageEvents"
-        
     ></ui-prop>
     <ui-prop type="dump"
         key="cancelInnerEvents"
-        
     ></ui-prop>
-
     <!-- 渲染其他没有接管的数据 -->
-    <div id="customProps">
-    </div>
+    <div id="customProps"></div>
 </div>
 `;
 
