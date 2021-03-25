@@ -4,14 +4,27 @@ const propUtils = require('../utils/prop');
 const excludeList = ['threshold'];
 exports.template = `
 <div class="polygon-collider-2d">
-    <div style="display: flex;">
+    <style>
+        .baseContent {
+            display: flex;
+        }
+        .baseContent > ui-prop {
+            flex: 1;
+            margin-right: 5px;
+        }
+        .baseContent > #buttonParent {
+            display: flex;
+            align-content: center;
+            align-items: center;
+        }
+    </style>
+    <div class="baseContent" >
         <ui-prop 
-            style="flex: 1;margin-right: 5px"
             type="dump"
             key="threshold"
         >
         </ui-prop>
-        <div style="display: flex;align-content: center;align-items: center;">
+        <div id="buttonParent" >
             <ui-button 
                 id="button"
                 class="blue tiny"
@@ -20,7 +33,6 @@ exports.template = `
             </ui-button>
         </div>
     </div>
-
     <div id="customProps">
     </div>
 </div>
@@ -38,7 +50,9 @@ exports.$ = {
 const uiElements = {
     buttton: {
         ready () {
-            this.$.button.addEventListener('click', () => { this.regenerate(); });
+            this.$.button.addEventListener('click', () => { 
+                this.regenerate(); 
+            });
         },
     },
     baseProps: {
