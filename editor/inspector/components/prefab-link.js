@@ -2,15 +2,25 @@
 const propUtils = require('../utils/prop');
 
 export const template = `
-    <div class="prefab-link">
-        <ui-label style="display: 'block';backgroundColor: '#333';border: '1px solid #666';borderRadius: '3px';margin: '10px';padding: '10px';" 
-            value="i18n:ENGINE.components.prefab_link.brief_help"
-        ></ui-label>
-    
-        <!-- 渲染其他没有接管的数据 -->
-        <div id="customProps>
-        </div>
-    </div>
+<div class="prefab-link">
+    <style>
+        #prefabTips {
+            display: 'block';
+            background-color: '#333';
+            border: '1px solid #666';
+            border-radius: '3px';
+            margin: '10px';
+            padding: '10px';
+        }
+    </style>
+    <ui-label id="prefabTips"
+        value="i18n:ENGINE.components.prefab_link.brief_help"
+    ></ui-label>
+
+    <!-- 渲染其他没有接管的数据 -->
+    <div id="customProps"></div>
+</div>
+
 `;
 
 exports.$ = {
