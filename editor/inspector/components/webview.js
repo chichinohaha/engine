@@ -8,12 +8,11 @@ const excludeList = [
 exports.template = `
 <div class="web-view-component">
 
-    <ui-prop key="url" class="customProps">
+    <ui-prop key="url" class="customProp" type="dump">
         <ui-label id="label" slot="label"></ui-label>
         <ui-input
             slot="content"
             id="content"
-            :value="dump.value.url.value"
             placeholder="https://www.cocos.com/"
         ></ui-input>
     </ui-prop>
@@ -61,10 +60,11 @@ exports.ready = function () {
 const uiElements = {
     baseProps: {
         ready () {
-            this.$.baseProps = this.$this.querySelectorAll('ui-prop:not(.customProps)');
+            this.$.baseProps = this.$this.querySelectorAll('ui-prop:not(.customProp)');
+            
         },
         update () {
-            this.$.baseProps = this.$.baseProps || this.$this.querySelectorAll('ui-prop:not(.customProps)');
+            this.$.baseProps = this.$.baseProps || this.$this.querySelectorAll('ui-prop:not(.customProp)');
             this.$.baseProps.forEach((element) => {
                 const dump = this.dump.value[element.getAttribute('key')];
                 let isVisible = dump && dump.visible;
@@ -81,14 +81,15 @@ const uiElements = {
     },
     label: {
         update () {
-            this.$.label.tooltip = this.dump.value.url.tooltip;
-            this.$.label.value = this.dump.value.url.name;
+            this.$.label.setAttribute('tooltip',this.dump.value.url.tooltip);
+            this.$.label.setAttribute('value',this.dump.value.url.name);
         },
     },
     content: {
         ready () {
             this.$.content.addEventListener('change', (event) => {
                 this.dump.value.url.value = event.target.value;
+                this.$.url.dispatch('change-dump');
             });
         },
         update () {
@@ -107,9 +108,15 @@ const uiElements = {
             }));
         },
     },
+    url: {
+        update(){
+            this.$.url.dump = this.dump;
+        }
+    }
 };
 exports.$ = {
     customProps: '#customProps',
     label: '#label',
     content: '#content',
+    url: 'ui-prop[key="url"]'
 };
