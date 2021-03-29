@@ -44,7 +44,6 @@ exports.template = `
         showflag="1"
     ></ui-prop>
 
-
     <ui-prop
         type="dump"
         key="normalSprite"
@@ -92,8 +91,7 @@ exports.template = `
     <ui-prop
         type="dump"
         key="checkEvents"
-    >
-    </ui-prop>
+    ></ui-prop>
 
     <!-- 渲染其他没有接管的数据 -->
     <div id="customProps"></div>
