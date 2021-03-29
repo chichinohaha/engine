@@ -4,4 +4,5 @@ module.exports = {
     // 'cc.UITransform': join(__dirname, './components/class.js'),
     'cc.PageView': join(__dirname, './components/page-view.js'),
     'cc.Toggle': join(__dirname, './components/toggle.js'),
+    'cc.VideoPlayer': join(__dirname, './components/video-player.js'),
 };
