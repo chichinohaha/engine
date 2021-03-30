@@ -87,9 +87,7 @@ const uiElements = {
             this.$.baseProps.forEach((element) => {
                 const key = element.getAttribute('key');
                 let isShow = this.dump.value[key].visible;
-                if (isShow) {
-                    element.render(this.dump.value[key]);
-                }
+          
                 if (element.hasAttribute('showflag')) {
                     const showflag = element.getAttribute('showflag');
                     if (showflag === 'useSystemFont') {
@@ -97,6 +95,9 @@ const uiElements = {
                     } else if (showflag === 'notUseSystemFont') {
                         isShow = isShow && !this.dump.value.useSystemFont.value;
                     }
+                }
+                if (isShow) {
+                    element.render(this.dump.value[key]);
                 }
                 element.style = isShow ? '' : 'display: none;';
             });
