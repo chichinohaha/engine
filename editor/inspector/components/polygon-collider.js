@@ -18,23 +18,20 @@ exports.template = `
             align-items: center;
         }
     </style>
-    <div class="baseContent" >
+    <div class="baseContent">
         <ui-prop 
             type="dump"
             key="threshold"
         >
         </ui-prop>
-        <div id="buttonParent" >
+        <div id="buttonParent">
             <ui-button 
                 id="button"
                 class="blue tiny"
-            >
-                Regenerate Points
-            </ui-button>
+            >Regenerate Points</ui-button>
         </div>
     </div>
-    <div id="customProps">
-    </div>
+    <div id="customProps"></div>
 </div>
 `;
 
