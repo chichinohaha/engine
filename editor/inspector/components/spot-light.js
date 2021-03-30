@@ -10,37 +10,30 @@ exports.template = `
 <div class="spot-light-component">
     <ui-prop type="dump"
         key="color"
-        
     ></ui-prop>
 
     <ui-prop type="dump"
         key="useColorTemperature"
-        
     ></ui-prop>
 
     <ui-prop type="dump"
         key="colorTemperature"
-        
     ></ui-prop>
 
     <ui-prop type="dump"
         key="size"
-        
     ></ui-prop>
 
     <ui-prop type="dump"
         key="range"
-        
     ></ui-prop>
 
     <ui-prop type="dump"
         key="spotAngle"
-        
     ></ui-prop>
 
     <ui-prop type="dump"
         key="term"
-        
     ></ui-prop>
 
     <ui-prop type="dump"
@@ -55,7 +48,6 @@ exports.template = `
 
     <ui-prop type="dump"
         key="staticSettings"
-        
     ></ui-prop>
 
     <!-- 渲染其他没有接管的数据 -->
