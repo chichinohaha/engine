@@ -7,8 +7,7 @@ exports.template = `
     <div class="content">
         <ui-prop type="dump"
             key="_asset"
-        >
-        </ui-prop>
+        ></ui-prop>
     </div>
     <!-- 渲染其他没有接管的数据 -->
     <div id="customProps"></div>
@@ -49,7 +48,7 @@ const uiElements = {
     },
     customProps: {
         update () {
-            this.$.customProps.replaceChildren(...propUtils.getCustomPropElements(['_asset','_lightmapInfos', 'info', '_blockInfos', '_layers'], this.dump, (element, prop) => {
+            this.$.customProps.replaceChildren(...propUtils.getCustomPropElements(['_asset', '_lightmapInfos', 'info', '_blockInfos', '_layers'], this.dump, (element, prop) => {
                 element.className = 'customProp';
                 if (prop.dump.visible) {
                     element.render(prop.dump);
