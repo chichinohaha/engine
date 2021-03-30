@@ -505,7 +505,7 @@ const uiElements = {
             for (const key of KEYS) {
                 this.$[key] = this.$this.shadowRoot.querySelector(`#${key}`);
                 const element = this.$[key];
-                element.addEventListener('change', this._onChangeData.bind(this, key, 100));
+                element.addEventListener('confirm', this._onChangeData.bind(this, key, 100));
             }
         },
         update () {
