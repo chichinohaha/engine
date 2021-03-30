@@ -31,8 +31,7 @@ module.exports = {
             wrapModeTTip: 'Wrap Mode T',
             faceSize: {
                 name: 'Face Size',
-                title:
-                    'Size of each cube face. If not specified, or specified as 0, the default size, which is the nearest power of two to (image.width)/4, is used.',
+                title: 'Size of each cube face. If not specified, or specified as 0, the default size, which is the nearest power of two to (image.width)/4, is used.',
             },
         },
         javascript: {
@@ -124,8 +123,7 @@ module.exports = {
             wrapModeSTip: 'Wrap Mode S',
             wrapModeT: 'Wrap Mode T',
             wrapModeTTip: 'Wrap Mode T',
-            modeWarn:
-                "Warning: WebGL 1.0 platform doesn't support 'repeat' filter for non-power-of-two textures(runtime fallback to 'clamp-to-edge'), effectively disabling features like the 'tilingOffset' property in many materials.",
+            modeWarn: 'Warning: WebGL 1.0 platform doesn\'t support \'repeat\' filter for non-power-of-two textures(runtime fallback to \'clamp-to-edge\'), effectively disabling features like the \'tilingOffset\' property in many materials.',
         },
         fbx: {
             browse: 'Change Target',
@@ -181,8 +179,7 @@ module.exports = {
                 },
                 materialDumpDir: {
                     name: 'Material dump directory',
-                    title:
-                        'The directory to dump the materials.\nDefault to a direct sub-folder named `Materials_${model-file-base-name}` under current path.',
+                    title: 'The directory to dump the materials.\nDefault to a direct sub-folder named `Materials_${model-file-base-name}` under current path.',
                 },
                 useVertexColors: {
                     name: 'Use vertex colors',
@@ -273,8 +270,7 @@ module.exports = {
             wrapModeSTip: 'Wrap Mode S',
             wrapModeT: 'Wrap Mode T',
             wrapModeTTip: 'Wrap Mode T',
-            modeWarn:
-                "Warning: WebGL 1.0 platform doesn't support 'repeat' filter for non-power-of-two textures(runtime fallback to 'clamp-to-edge'), effectively disabling features like the 'tilingOffset' property in many materials.",
+            modeWarn: 'Warning: WebGL 1.0 platform doesn\'t support \'repeat\' filter for non-power-of-two textures(runtime fallback to \'clamp-to-edge\'), effectively disabling features like the \'tilingOffset\' property in many materials.',
         },
     },
 };
