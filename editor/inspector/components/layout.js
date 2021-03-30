@@ -156,9 +156,9 @@ const uiElements = {
             }
             const judge = (lvalue, rvalue, isequal = true) => {
                 if (!isequal) {
-                    return this.dump.value[lvalue].value != rvalue && (this.dump.values.length === 1 || this.dump.values.every((item) => item.value[lvalue].value != rvalue));
+                    return this.dump.value[lvalue].value != rvalue && (!this.dump.values || this.dump.values.length === 1 || this.dump.values.every((item) => item.value[lvalue].value != rvalue));
                 } else {
-                    return this.dump.value[lvalue].value == rvalue && (this.dump.values.length === 1 || this.dump.values.every((item) => item.value[lvalue].value == rvalue));
+                    return this.dump.value[lvalue].value == rvalue && (!this.dump.values || this.dump.values.length === 1 || this.dump.values.every((item) => item.value[lvalue].value == rvalue));
                 }
             };
             this.$.baseProps.forEach((element) => {
