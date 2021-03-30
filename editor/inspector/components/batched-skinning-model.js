@@ -1,39 +1,25 @@
+/* eslint-disable @typescript-eslint/no-unsafe-return */
+const propUtils = require('../utils/prop');
+
 exports.template = `
 <div class="batched-skinning-component">
-    <div>
-        <ins-prop
-            :dump="operation"
-        >
-            <ui-button class="green"
-                :style="style"
-                @confirm="_onApplyClick($event)"
-            >Cook</ui-button>
-        </ins-prop>
-    </div>
-
-    <div class="content"
-        v-for="item in sortProp(dump.value)"
-        v-if="item.dump.visible"
-    >
-        <ins-prop auto="true"
-            :dump="item.dump"
-            :dumps="dumps ? dumps.map(dump => dump.value[item.key]) : null"
-        ></ins-prop>
-    </div>
+    <ui-prop>
+        <ui-label slot="label" value="Operation"></ui-label>
+        <ui-button id="button" class="green" slot="content">Cook</ui-button>
+    </ui-prop>
+    <div id="customProps"></div>
 </div>
 `;
 
 exports.methods = {
-
-
-    _onApplyClick() {
+    _onApplyClick () {
         Editor.Message.send('scene', 'execute-component-method', {
             uuid: this.dump.value.uuid.value,
             name: 'cook',
             args: [],
         });
 
-        this.dumps && this.dumps.forEach((dump) => {
+        this.dump.values && this.dump.values.forEach((dump) => {
             Editor.Message.send('scene', 'execute-component-method', {
                 uuid: dump.value.uuid.value,
                 name: 'combine',
@@ -43,18 +29,53 @@ exports.methods = {
     },
 };
 
-
-
-export function data() {
-    return {
-        operation: {
-            name: 'Operation',
+const uiElements = {
+    button: {
+        ready () {
+            this.$.button.addEventListener('confirm', (event) => {
+                this._onApplyClick();
+            });
         },
-        style: {
+    },
+    customProps: {
+        update () {
+            this.$.customProps.replaceChildren(...propUtils.getCustomPropElements([], this.dump, (element, prop) => {
+                element.className = 'customProp';
+                const isShow = prop.dump.visible;
+                if (isShow) {
+                    element.render(prop.dump);
+                }
+                element.style = isShow ? '' : 'display:none;';
+            }));
         },
-    };
-}
+    },
+};
 
-export function mounted() { }
+exports.ready = function () {
+    for (const key in uiElements) {
+        const element = uiElements[key];
+        if (typeof element.ready === 'function') {
+            element.ready.call(this);
+        }
+    }
+};
+exports.$ = {
+    customProps: '#customProps',
+    button: '#button',
+};
 
-export function beforeDestroy() { }
+exports.update = function (dump) {
+    for (const key in dump.value) {
+        const info = dump.value[key];
+        if (dump.values) {
+            info.values = dump.values.map((value) => value[key].value);
+        }
+    }
+    this.dump = dump;
+    for (const key in uiElements) {
+        const element = uiElements[key];
+        if (typeof element.update === 'function') {
+            element.update.call(this);
+        }
+    }
+};
