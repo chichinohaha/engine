@@ -13,9 +13,7 @@ export const template = `
             padding: '10px';
         }
     </style>
-    <ui-label id="prefabTips"
-        value="i18n:ENGINE.components.prefab_link.brief_help"
-    ></ui-label>
+    <ui-label id="prefabTips" value="i18n:ENGINE.components.prefab_link.brief_help"></ui-label>
 
     <!-- 渲染其他没有接管的数据 -->
     <div id="customProps"></div>
