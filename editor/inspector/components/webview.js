@@ -10,22 +10,14 @@ exports.template = `
 
     <ui-prop key="url" class="customProp" type="dump">
         <ui-label id="label" slot="label"></ui-label>
-        <ui-input
-            slot="content"
-            id="content"
-            placeholder="https://www.cocos.com/"
-        ></ui-input>
+        <ui-input slot="content" id="content" placeholder="https://www.cocos.com/"></ui-input>
     </ui-prop>
-   
-    <ui-prop type="dump"
-        key="opacity"
-    ></ui-prop>
-    
-    <ui-prop type="dump"
-        key="webviewEvents"
-    ></ui-prop>
 
-    <!-- 渲染其他没有接管的数据 -->
+    <ui-prop type="dump" key="opacity"></ui-prop>
+
+    <ui-prop type="dump" key="webviewEvents"></ui-prop>
+
+    <!-- Render other data that is not taken over -->
     <div id="customProps"></div>
 </div>
 `;
