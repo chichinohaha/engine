@@ -8,45 +8,19 @@ const excludeList = [
 ];
 exports.template = `
 <div class="scroll-view-component">
-    <ui-prop type="dump"
-        key="content"
-    ></ui-prop>
-    <ui-prop type="dump"
-        key="horizontal"
-    ></ui-prop>
-    <ui-prop type="dump"
-        key="vertical"        
-    ></ui-prop>
-    <ui-prop type="dump"
-        key="inertia"        
-    ></ui-prop>
-    <ui-prop type="dump"
-        showflag="inertia"
-        key="brake"
-    ></ui-prop>
-    <ui-prop type="dump"
-        key="elastic"
-    ></ui-prop>
-    <ui-prop type="dump"
-        showflag="elastic"
-        key="bounceDuration"
-    ></ui-prop>
-    <ui-prop type="dump"
-        showflag="horizontal"
-        key="horizontalScrollBar"
-    ></ui-prop>
-    <ui-prop type="dump"
-        showflag="vertical"
-        key="verticalScrollBar"
-    ></ui-prop>
-    <ui-prop type="dump"
-        key="scrollEvents"
-    ></ui-prop>
-    <ui-prop type="dump"
-        key="cancelInnerEvents"
-    ></ui-prop>
+    <ui-prop type="dump" key="content"></ui-prop>
+    <ui-prop type="dump" key="horizontal"></ui-prop>
+    <ui-prop type="dump" key="vertical"></ui-prop>
+    <ui-prop type="dump" key="inertia"></ui-prop>
+    <ui-prop type="dump" showflag="inertia" key="brake"></ui-prop>
+    <ui-prop type="dump" key="elastic"></ui-prop>
+    <ui-prop type="dump" showflag="elastic" key="bounceDuration"></ui-prop>
+    <ui-prop type="dump" showflag="horizontal" key="horizontalScrollBar"></ui-prop>
+    <ui-prop type="dump" showflag="vertical" key="verticalScrollBar"></ui-prop>
+    <ui-prop type="dump" key="scrollEvents"></ui-prop>
+    <ui-prop type="dump" key="cancelInnerEvents"></ui-prop>
 
-    <!-- 渲染其他没有接管的数据 -->
+    <!-- Render other data that is not taken over -->
     <div id="customProps"></div>
 </div>
 `;
