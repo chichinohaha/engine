@@ -8,69 +8,31 @@ const excludeList = [
 ];
 exports.template = `
 <div class="video-player-component">
-    <ui-prop
-        type="dump"
-        key="resourceType"
-    ></ui-prop>
+    <ui-prop type="dump" key="resourceType"></ui-prop>
 
-    <ui-prop
-        type="dump"
-        showflag="0"
-        key="remoteURL"
-    ></ui-prop>
+    <ui-prop type="dump" showflag="0" key="remoteURL"></ui-prop>
 
-    <ui-prop
-        type="dump"
-        showflag="1"
-        key="clip"
-    ></ui-prop>
+    <ui-prop type="dump" showflag="1" key="clip"></ui-prop>
 
-    <ui-prop
-        type="dump"
-        key="playOnAwake"
-    ></ui-prop>
+    <ui-prop type="dump" key="playOnAwake"></ui-prop>
 
-    <ui-prop
-        type="dump"
-        key="loop"
-    ></ui-prop>
+    <ui-prop type="dump" key="loop"></ui-prop>
 
-    <ui-prop
-        type="dump"
-        key="mute"
-    ></ui-prop>
+    <ui-prop type="dump" key="mute"></ui-prop>
 
-    <ui-prop
-        type="dump"
-        key="volume"
-    ></ui-prop>
+    <ui-prop type="dump" key="volume"></ui-prop>
 
-    <ui-prop
-        type="dump"
-        key="playbackRate"
-    ></ui-prop>
+    <ui-prop type="dump" key="playbackRate"></ui-prop>
 
-    <ui-prop
-        type="dump"
-        key="keepAspectRatio"
-    ></ui-prop>
+    <ui-prop type="dump" key="keepAspectRatio"></ui-prop>
 
-    <ui-prop
-        type="dump"
-        key="fullScreenOnAwake"
-    ></ui-prop>
+    <ui-prop type="dump" key="fullScreenOnAwake"></ui-prop>
 
-    <ui-prop
-        type="dump"
-        key="stayOnBottom"
-    ></ui-prop>
+    <ui-prop type="dump" key="stayOnBottom"></ui-prop>
 
-    <ui-prop
-        type="dump"
-        key="videoPlayerEvent"
-    ></ui-prop>
+    <ui-prop type="dump" key="videoPlayerEvent"></ui-prop>
 
-    <!-- 渲染其他没有接管的数据 -->
+    <!-- Render other data that is not taken over -->
     <div id="customProps"></div>
 </div>
 `;
