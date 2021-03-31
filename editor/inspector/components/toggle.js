@@ -10,90 +10,29 @@ const excludeList = [
 
 exports.template = `
 <div class="toggle-component">
-    <ui-prop
-        type="dump"
-        key="target"
-    ></ui-prop>
-    <ui-prop
-        type="dump"
-        key="interactable"
-    ></ui-prop>
-    <ui-prop
-        type="dump"
-        key="transition"
-    ></ui-prop>
+    <ui-prop type="dump" key="target"></ui-prop>
+    <ui-prop type="dump" key="interactable"></ui-prop>
+    <ui-prop type="dump" key="transition"></ui-prop>
 
-    <ui-prop
-        type="dump"
-        key="normalColor"
-        showflag="1"
-    ></ui-prop>
-    <ui-prop
-        type="dump"
-        key="pressedColor"
-        showflag="1"
-    ></ui-prop>
-    <ui-prop
-        type="dump"
-        key="hoverColor"
-        showflag="1"
-    ></ui-prop>
-    <ui-prop
-        type="dump"
-        key="disabledColor"
-        showflag="1"
-    ></ui-prop>
+    <ui-prop type="dump" key="normalColor" showflag="1"></ui-prop>
+    <ui-prop type="dump" key="pressedColor" showflag="1"></ui-prop>
+    <ui-prop type="dump" key="hoverColor" showflag="1"></ui-prop>
+    <ui-prop type="dump" key="disabledColor" showflag="1"></ui-prop>
 
-    <ui-prop
-        type="dump"
-        key="normalSprite"
-        showflag="2"
-    ></ui-prop>
-    <ui-prop
-        type="dump"
-        key="pressedSprite"
-        showflag="2"
-    ></ui-prop>
-    <ui-prop
-        type="dump"
-        key="hoverSprite"
-        showflag="2"
-    ></ui-prop>
-    <ui-prop
-        type="dump"
-        key="disabledSprite"
-        showflag="2"
-    ></ui-prop>
+    <ui-prop type="dump" key="normalSprite" showflag="2"></ui-prop>
+    <ui-prop type="dump" key="pressedSprite" showflag="2"></ui-prop>
+    <ui-prop type="dump" key="hoverSprite" showflag="2"></ui-prop>
+    <ui-prop type="dump" key="disabledSprite" showflag="2"></ui-prop>
 
-    <ui-prop
-        type="dump"
-        showflag="3"
-        key="zoomScale"
-    ></ui-prop>
-    <ui-prop
-        type="dump"
-        showflag="3"
-        key="duration"
-    ></ui-prop>
+    <ui-prop type="dump" showflag="3" key="zoomScale"></ui-prop>
+    <ui-prop type="dump" showflag="3" key="duration"></ui-prop>
 
-    <ui-prop
-        type="dump"
-        key="isChecked"
-    ></ui-prop>
-    <ui-prop
-        type="dump"
-        key="checkMark"
-    ></ui-prop>
-    <ui-prop
-        type="dump"
-        key="toggleGroup"
-    ></ui-prop>
-    <ui-prop
-        type="dump"
-        key="checkEvents"
-    ></ui-prop>
+    <ui-prop type="dump" key="isChecked"></ui-prop>
+    <ui-prop type="dump" key="checkMark"></ui-prop>
+    <ui-prop type="dump" key="toggleGroup"></ui-prop>
+    <ui-prop type="dump" key="checkEvents"></ui-prop>
 
-    <!-- 渲染其他没有接管的数据 -->
+    <!-- Render other data that is not taken over -->
     <div id="customProps"></div>
 </div>
 `;
