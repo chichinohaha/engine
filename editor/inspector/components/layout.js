@@ -10,134 +10,37 @@ const excludeList = [
 ];
 exports.template = `
 <div class="layout-component">
-    <ui-prop
-        type="dump"
-        key="type"
-    ></ui-prop>
-    <ui-prop
-        type="dump"
-        key="resizeMode"
-    ></ui-prop>
-    <ui-prop
-        type="dump"
-        key="cellSize"
-        showflag="resizeMode2"
-    ></ui-prop>
-    <ui-prop
-        type="dump"
-        showflag="type1"
-        key="alignHorizontal"
-    ></ui-prop>
-    <ui-prop
-        type="dump"
-        showflag="type1"
-        key="paddingLeft"
-    ></ui-prop>
-    <ui-prop
-        type="dump"
-        showflag="type1"
-        key="paddingRight"
-    ></ui-prop>
-    <ui-prop
-        type="dump"
-        showflag="type1"
-        key="spacingX"
-    ></ui-prop>
-    <ui-prop
-        type="dump"
-        showflag="type1"
-        key="horizontalDirection"
-    ></ui-prop>
+    <ui-prop type="dump" key="type"></ui-prop>
+    <ui-prop type="dump" key="resizeMode"></ui-prop>
+    <ui-prop type="dump" key="cellSize" showflag="resizeMode2"></ui-prop>
+    <ui-prop type="dump" showflag="type1" key="alignHorizontal"></ui-prop>
+    <ui-prop type="dump" showflag="type1" key="paddingLeft"></ui-prop>
+    <ui-prop type="dump" showflag="type1" key="paddingRight"></ui-prop>
+    <ui-prop type="dump" showflag="type1" key="spacingX"></ui-prop>
+    <ui-prop type="dump" showflag="type1" key="horizontalDirection"></ui-prop>
 
-    <ui-prop
-        type="dump"
-        showflag="type2"
-        key="alignVertical"
-    ></ui-prop>
-    <ui-prop
-        type="dump"
-        showflag="type2"
-        key="paddingTop"
-    ></ui-prop>
-    <ui-prop
-        type="dump"
-        showflag="type2"
-        key="paddingBottom"
-    ></ui-prop>
-    <ui-prop
-        type="dump"
-        showflag="type2"
-        key="spacingY"
-    ></ui-prop>
-    <ui-prop
-        type="dump"
-        showflag="type2"
-        key="verticalDirection"
-    ></ui-prop>
-    <ui-prop
-        type="dump"
-        showflag="type3"
-        key="startAxis"
-    ></ui-prop>
-    <ui-prop
-        type="dump"
-        showflag="type3"
-        key="paddingTop"
-    ></ui-prop>
-    <ui-prop
-        type="dump"
-        showflag="type3"
-        key="paddingBottom"
-    ></ui-prop>
-    <ui-prop
-        type="dump"
-        showflag="type3"
-        key="paddingLeft"
-    ></ui-prop>
-    <ui-prop
-        type="dump"
-        showflag="type3"
-        key="paddingRight"
-    ></ui-prop>
-    <ui-prop
-        type="dump"
-        showflag="type3"
-        key="spacingX"
-    ></ui-prop>
-    <ui-prop
-        type="dump"
-        showflag="type3"
-        key="spacingY"
-    ></ui-prop>
-    <ui-prop
-        type="dump"
-        showflag="type3"
-        key="verticalDirection"
-    ></ui-prop>
-    <ui-prop
-        type="dump"
-        showflag="type3"
-        key="horizontalDirection"
-    ></ui-prop>
-    <ui-prop
-        type="dump"
-        showflag="type3"
-        key="constraint"
-    ></ui-prop>
-    <ui-prop
-        type="dump"
-        showflag="type3"
-        key="constraintNum"
-    ></ui-prop>
-</div>
-<ui-prop
-    type="dump"
-    showflag="typeNot0"
-    key="affectedByScale"
-></ui-prop>
+    <ui-prop type="dump" showflag="type2" key="alignVertical"></ui-prop>
+    <ui-prop type="dump" showflag="type2" key="paddingTop"></ui-prop>
+    <ui-prop type="dump" showflag="type2" key="paddingBottom"></ui-prop>
+    <ui-prop type="dump" showflag="type2" key="spacingY"></ui-prop>
+    <ui-prop type="dump" showflag="type2" key="verticalDirection"></ui-prop>
 
-<!-- Render other data that is not taken over -->
-<div id="customProps"></div>
+    <ui-prop type="dump" showflag="type3" key="startAxis"></ui-prop>
+    <ui-prop type="dump" showflag="type3" key="paddingTop"></ui-prop>
+    <ui-prop type="dump" showflag="type3" key="paddingBottom"></ui-prop>
+    <ui-prop type="dump" showflag="type3" key="paddingLeft"></ui-prop>
+    <ui-prop type="dump" showflag="type3" key="paddingRight"></ui-prop>
+    <ui-prop type="dump" showflag="type3" key="spacingX"></ui-prop>
+    <ui-prop type="dump" showflag="type3" key="spacingY"></ui-prop>
+    <ui-prop type="dump" showflag="type3" key="verticalDirection"></ui-prop>
+    <ui-prop type="dump" showflag="type3" key="horizontalDirection"></ui-prop>
+    <ui-prop type="dump" showflag="type3" key="constraint"></ui-prop>
+    <ui-prop type="dump" showflag="type3" key="constraintNum"></ui-prop>
+
+    <ui-prop type="dump" showflag="typeNot0" key="affectedByScale"></ui-prop>
+
+    <!-- Render other data that is not taken over -->
+    <div id="customProps"></div>
 </div>
 `;
 const uiElements = {
