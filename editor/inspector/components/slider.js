@@ -6,24 +6,16 @@ const excludeList = [
 ];
 exports.template = `
 <div class="silder-component">
-    
-    <ui-prop type="dump"
-        key="handle"
-    ></ui-prop>
 
-    <ui-prop type="dump"
-        key="direction"
-    ></ui-prop>
+    <ui-prop type="dump" key="handle"></ui-prop>
 
-    <ui-prop type="dump"
-        key="progress"
-    ></ui-prop>
+    <ui-prop type="dump" key="direction"></ui-prop>
 
-    <ui-prop type="dump"
-        key="slideEvents"
-    ></ui-prop>
+    <ui-prop type="dump" key="progress"></ui-prop>
 
-    <!-- 渲染其他没有接管的数据 -->
+    <ui-prop type="dump" key="slideEvents"></ui-prop>
+
+    <!-- Render other data that is not taken over -->
     <div id="customProps"></div>
 </div>
 `;
