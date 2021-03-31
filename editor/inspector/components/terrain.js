@@ -5,11 +5,9 @@ const propUtils = require('../utils/prop');
 exports.template = `
 <div class="terrain">
     <div class="content">
-        <ui-prop type="dump"
-            key="_asset"
-        ></ui-prop>
+        <ui-prop type="dump" key="_asset"></ui-prop>
     </div>
-    <!-- 渲染其他没有接管的数据 -->
+    <!-- Render other data that is not taken over -->
     <div id="customProps"></div>
 </div>
 `;
