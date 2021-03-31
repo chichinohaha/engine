@@ -13,12 +13,9 @@ exports.template = `
             padding: 10px;
         }
     </style>
-    <ui-label
-        id="safeAreaTips"
-        value="i18n:engine.components.safe_area.brief_help"
-    ></ui-label>
+    <ui-label id="safeAreaTips" value="i18n:engine.components.safe_area.brief_help"></ui-label>
 
-    <!-- 渲染其他没有接管的数据 -->
+    <!-- Render other data that is not taken over -->
     <div id="customProps"></div>
 </div>
 `;
