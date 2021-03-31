@@ -4,28 +4,13 @@ const propUtils = require('../utils/prop');
 const excludeList = ['fillCenter', 'fillRange', 'fillStart', 'fillType', 'type'];
 exports.template = `
 <div class="sprite-component">
-    <ui-prop type="dump"
-        key="type"
-    ></ui-prop>
-    
-    <ui-prop type="dump"
-        showflag="type3"
-        key="fillType"
-    ></ui-prop>
-    <ui-prop type="dump"
-        readonlyflag="fillTypeNot2"
-        showflag="type3"
-        key="fillCenter"           
-    ></ui-prop>
-    <ui-prop type="dump"
-        showflag="type3"
-        key="fillStart"
-    ></ui-prop>
-    <ui-prop type="dump"
-        showflag="type3"
-        key="fillRange"
-    ></ui-prop>
-    <!-- 渲染其他没有接管的数据 -->
+    <ui-prop type="dump" key="type"></ui-prop>
+
+    <ui-prop type="dump" showflag="type3" key="fillType"></ui-prop>
+    <ui-prop type="dump" readonlyflag="fillTypeNot2" showflag="type3" key="fillCenter"></ui-prop>
+    <ui-prop type="dump" showflag="type3" key="fillStart"></ui-prop>
+    <ui-prop type="dump" showflag="type3" key="fillRange"></ui-prop>
+    <!-- Render other data that is not taken over -->
     <div id="customProps"></div>
 </div>
 `;
