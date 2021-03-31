@@ -8,47 +8,25 @@ const excludeList = [
 
 exports.template = `
 <div class="spot-light-component">
-    <ui-prop type="dump"
-        key="color"
-    ></ui-prop>
+    <ui-prop type="dump" key="color"></ui-prop>
 
-    <ui-prop type="dump"
-        key="useColorTemperature"
-    ></ui-prop>
+    <ui-prop type="dump" key="useColorTemperature"></ui-prop>
 
-    <ui-prop type="dump"
-        key="colorTemperature"
-    ></ui-prop>
+    <ui-prop type="dump" key="colorTemperature"></ui-prop>
 
-    <ui-prop type="dump"
-        key="size"
-    ></ui-prop>
+    <ui-prop type="dump" key="size"></ui-prop>
 
-    <ui-prop type="dump"
-        key="range"
-    ></ui-prop>
+    <ui-prop type="dump" key="range"></ui-prop>
 
-    <ui-prop type="dump"
-        key="spotAngle"
-    ></ui-prop>
+    <ui-prop type="dump" key="spotAngle"></ui-prop>
 
-    <ui-prop type="dump"
-        key="term"
-    ></ui-prop>
+    <ui-prop type="dump" key="term"></ui-prop>
 
-    <ui-prop type="dump"
-        showflag="term"
-        key="luminance"
-    ></ui-prop>
+    <ui-prop type="dump" showflag="term" key="luminance"></ui-prop>
 
-    <ui-prop type="dump"
-        showflag="notTerm"
-        key="luminousPower"
-    ></ui-prop>
+    <ui-prop type="dump" showflag="notTerm" key="luminousPower"></ui-prop>
 
-    <ui-prop type="dump"
-        key="staticSettings"
-    ></ui-prop>
+    <ui-prop type="dump" key="staticSettings"></ui-prop>
 
     <!-- 渲染其他没有接管的数据 -->
     <div id="customProps"></div>
