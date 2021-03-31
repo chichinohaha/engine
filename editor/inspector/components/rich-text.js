@@ -9,56 +9,31 @@ const excludeList = [
 
 exports.template = `
 <div class="rich-text-component">
-    <ui-prop type="dump"
-        key="string"
-    ></ui-prop>
-    
-    <ui-prop type="dump"
-        key="horizontalAlign"
-    ></ui-prop>
-    
-    <ui-prop type="dump"
-        key="fontSize"
-    ></ui-prop>
+    <ui-prop type="dump" key="string"></ui-prop>
 
-    <ui-prop type="dump"
-        showflag="useSystemFont"
-        key="fontFamily"
-    ></ui-prop>
+    <ui-prop type="dump" key="horizontalAlign"></ui-prop>
 
-    <ui-prop type="dump"
-        showflag="notUseSystemFont"
-        key="font"
-    ></ui-prop>
-    
-    
-    <ui-prop type="dump"
-        key="useSystemFont"
-    ></ui-prop>
-        
-    <ui-prop type="dump"
-        showflag="useSystemFont"
-        key="cacheMode"
-    ></ui-prop>
-    
-    <ui-prop type="dump"
-        key="maxWidth"
-    ></ui-prop>
-    
-    <ui-prop type="dump"
-        key="lineHeight"     
-    ></ui-prop>
-    
-    <ui-prop type="dump"
-        key="imageAtlas"
-    ></ui-prop>
-    
-    <ui-prop type="dump"
-        key="handleTouchEvent"
-    ></ui-prop>
+    <ui-prop type="dump" key="fontSize"></ui-prop>
 
-    <!-- 渲染其他没有接管的数据 -->
-    <div id="customProps"></div>    
+    <ui-prop type="dump" showflag="useSystemFont" key="fontFamily"></ui-prop>
+
+    <ui-prop type="dump" showflag="notUseSystemFont" key="font"></ui-prop>
+
+
+    <ui-prop type="dump" key="useSystemFont"></ui-prop>
+
+    <ui-prop type="dump" showflag="useSystemFont" key="cacheMode"></ui-prop>
+
+    <ui-prop type="dump" key="maxWidth"></ui-prop>
+
+    <ui-prop type="dump" key="lineHeight"></ui-prop>
+
+    <ui-prop type="dump" key="imageAtlas"></ui-prop>
+
+    <ui-prop type="dump" key="handleTouchEvent"></ui-prop>
+
+    <!-- Render other data that is not taken over -->
+    <div id="customProps"></div>
 </div>
 `;
 
