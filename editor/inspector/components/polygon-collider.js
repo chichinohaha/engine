@@ -8,27 +8,23 @@ exports.template = `
         .baseContent {
             display: flex;
         }
-        .baseContent > ui-prop {
+
+        .baseContent>ui-prop {
             flex: 1;
             margin-right: 5px;
         }
-        .baseContent > #buttonParent {
+
+        .baseContent>#buttonParent {
             display: flex;
             align-content: center;
             align-items: center;
         }
     </style>
     <div class="baseContent">
-        <ui-prop 
-            type="dump"
-            key="threshold"
-        >
+        <ui-prop type="dump" key="threshold">
         </ui-prop>
         <div id="buttonParent">
-            <ui-button 
-                id="button"
-                class="blue tiny"
-            >Regenerate Points</ui-button>
+            <ui-button id="button" class="blue tiny">Regenerate Points</ui-button>
         </div>
     </div>
     <div id="customProps"></div>
