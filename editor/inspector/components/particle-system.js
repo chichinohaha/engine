@@ -1,445 +1,155 @@
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 
-const { readFileSync } = require('fs-extra');
-const { join } = require('path');
 const propUtils = require('../utils/prop');
 
 exports.template = `
 <div class="particle-system-component">
     <div class="content">
-        <ui-prop
-            type="dump"
-            key="duration"
-        ></ui-prop>
-
-        <ui-prop
-            type="dump"
-            key="capacity"
-        ></ui-prop>
-
-        <ui-prop
-            type="dump"
-            key="loop"
-        ></ui-prop>
-
-        <ui-prop
-            type="dump"
-            key="playOnAwake"
-        ></ui-prop>
-
-        <ui-prop
-            type="dump"
-            key="prewarm"
-        ></ui-prop>
-
-        <ui-prop
-            type="dump"
-            key="simulationSpace"
-        ></ui-prop>
-
-        <ui-prop
-            type="dump"
-            key="simulationSpeed"
-        ></ui-prop>
-
-        <ui-prop
-            type="dump"
-            key="startDelay"
-        ></ui-prop>
-
-        <ui-prop
-            type="dump"
-            key="startLifetime"
-        ></ui-prop>
-
-        <ui-prop
-            type="dump"
-            key="startColor"
-        ></ui-prop>
-
-        <ui-prop
-            type="dump"
-            key="scaleSpace"
-        ></ui-prop>
-
-        <ui-prop
-            type="dump"
-            key="startSize3D"
-        ></ui-prop>
-
-        <ui-prop
-            type="dump"
-            key="startSizeX"
-        ></ui-prop>
+        <ui-prop type="dump" key="duration"></ui-prop>
+        <ui-prop type="dump" key="capacity"></ui-prop>
+        <ui-prop type="dump" key="loop"></ui-prop>
+        <ui-prop type="dump" key="playOnAwake"></ui-prop>
+        <ui-prop type="dump" key="prewarm"></ui-prop>
+        <ui-prop type="dump" key="simulationSpace"></ui-prop>
+        <ui-prop type="dump" key="simulationSpeed"></ui-prop>
+        <ui-prop type="dump" key="startDelay"></ui-prop>
+        <ui-prop type="dump" key="startLifetime"></ui-prop>
+        <ui-prop type="dump" key="startColor"></ui-prop>
+        <ui-prop type="dump" key="scaleSpace"></ui-prop>
+        <ui-prop type="dump" key="startSize3D"></ui-prop>
+        <ui-prop type="dump" key="startSizeX"></ui-prop>
         <!--TODO: if(!startSize3D.value) change the name to startSize-->
-
-        <ui-prop
-            type="dump"
-            showflag="startSize3D.value"
-            key="startSizeY"
-        ></ui-prop>
-
-        <ui-prop
-            type="dump"
-            showflag="startSize3D.value"
-            key="startSizeZ"
-        ></ui-prop>
-
-        <ui-prop
-            type="dump"
-            key="startSpeed"
-        ></ui-prop>
-
-        <ui-prop
-            type="dump"
-            key="startRotation3D"
-        ></ui-prop>
-
-        <ui-prop
-            type="dump"
-            key="startRotationX"
-            showflag="startSize3D.value"
-        ></ui-prop>
-
-        <ui-prop
-            type="dump"
-            key="startRotationY"
-            showflag="startSize3D.value"
-        ></ui-prop>
-        <ui-prop
-            type="dump"
-            showflag="startRotation3D.value"
-            key="startRotationZ"
-        ></ui-prop>
-        <ui-prop
-            type="dump"
-            showflag="!startRotation3D.value"
-            name="StartRotation"
-            key="startRotationZ"
-        >
+        <ui-prop type="dump" showflag="startSize3D.value" key="startSizeY"></ui-prop>
+        <ui-prop type="dump" showflag="startSize3D.value" key="startSizeZ"></ui-prop>
+        <ui-prop type="dump" key="startSpeed"></ui-prop>
+        <ui-prop type="dump" key="startRotation3D"></ui-prop>
+        <ui-prop type="dump" key="startRotationX" showflag="startSize3D.value"></ui-prop>
+        <ui-prop type="dump" key="startRotationY" showflag="startSize3D.value"></ui-prop>
+        <ui-prop type="dump" showflag="startRotation3D.value" key="startRotationZ"></ui-prop>
+        <ui-prop type="dump" showflag="!startRotation3D.value" name="StartRotation" key="startRotationZ">
         </ui-prop>
-
-        <ui-prop
-            type="dump"
-            key="gravityModifier"
-        ></ui-prop>
-
-        <ui-prop
-            type="dump"
-            key="rateOverTime"
-        ></ui-prop>
-
-        <ui-prop
-            type="dump"
-            key="rateOverDistance"
-        ></ui-prop>
-
-        <ui-prop
-            type="dump"
-            key="bursts"
-        ></ui-prop>
-
-        <ui-prop
-            type="dump"
-            key="enableCulling"
-        ></ui-prop>
-
-        <ui-section
-            class="config"
-            key="shapeModule"
-        >
-            <ui-prop
-                slot="header"
-                class="header"
-                type="dump"
-                key="shapeModule.value.enable"
-                labelflag="shapeModule"
-                empty="true"
-            >
+        <ui-prop type="dump" key="gravityModifier"></ui-prop>
+        <ui-prop type="dump" key="rateOverTime"></ui-prop>
+        <ui-prop type="dump" key="rateOverDistance"></ui-prop>
+        <ui-prop type="dump" key="bursts"></ui-prop>
+        <ui-prop type="dump" key="enableCulling"></ui-prop>
+        <ui-section class="config" key="shapeModule">
+            <ui-prop slot="header" class="header" type="dump" key="shapeModule.value.enable" labelflag="shapeModule"
+                empty="true">
                 <ui-checkbox></ui-checkbox>
                 <ui-label></ui-label>
             </ui-prop>
-            <ui-prop
-                type="dump"
-                key="shapeModule.value.shapeType"
-            ></ui-prop>
-
-            <ui-prop
-                showflag="checkEnumInSubset,shapeModule.value.shapeType,Box,Cone,Sphere,Hemisphere"
-                empty="true"
-                type="dump"
-                key="shapeModule.value.emitFrom"
-            >
+            <ui-prop type="dump" key="shapeModule.value.shapeType"></ui-prop>
+            <ui-prop showflag="checkEnumInSubset,shapeModule.value.shapeType,Box,Cone,Sphere,Hemisphere" empty="true"
+                type="dump" key="shapeModule.value.emitFrom">
                 <ui-select id="emitFromSelect"></ui-select>
             </ui-prop>
 
-            <ui-prop
-                type="dump"
-                showflag="checkEnumInSubset,shapeModule.value.shapeType,Circle,Cone,Sphere,Hemisphere"
-                key="shapeModule.value.radius"
-            ></ui-prop>
+            <ui-prop type="dump" showflag="checkEnumInSubset,shapeModule.value.shapeType,Circle,Cone,Sphere,Hemisphere"
+                key="shapeModule.value.radius"></ui-prop>
 
-            <ui-prop
-                type="dump"
-                showflag="checkEnumInSubset,shapeModule.value.shapeType,Circle,Cone,Sphere,Hemisphere"
-                key="shapeModule.value.radiusThickness"
-            ></ui-prop>
+            <ui-prop type="dump" showflag="checkEnumInSubset,shapeModule.value.shapeType,Circle,Cone,Sphere,Hemisphere"
+                key="shapeModule.value.radiusThickness"></ui-prop>
 
-            <ui-prop
-                type="dump"
-                showflag="checkEnumInSubset,shapeModule.value.shapeType,Cone"
-                key="shapeModule.value.angle"
-            ></ui-prop>
+            <ui-prop type="dump" showflag="checkEnumInSubset,shapeModule.value.shapeType,Cone"
+                key="shapeModule.value.angle"></ui-prop>
 
-            <ui-prop
-                type="dump"
-                showflag="checkEnumInSubset,shapeModule.value.shapeType,Circle,Cone"
-                key="shapeModule.value.arc"
-            ></ui-prop>
+            <ui-prop type="dump" showflag="checkEnumInSubset,shapeModule.value.shapeType,Circle,Cone"
+                key="shapeModule.value.arc"></ui-prop>
 
-            <ui-prop
-                type="dump"
-                showflag="checkEnumInSubset,shapeModule.value.shapeType,Circle,Cone"
-                key="shapeModule.value.arcMode"
-            ></ui-prop>
+            <ui-prop type="dump" showflag="checkEnumInSubset,shapeModule.value.shapeType,Circle,Cone"
+                key="shapeModule.value.arcMode"></ui-prop>
 
-            <ui-prop
-                type="dump"
-                showflag="checkEnumInSubset,shapeModule.value.shapeType,Circle,Cone"
-                key="shapeModule.value.arcSpread"
-            ></ui-prop>
+            <ui-prop type="dump" showflag="checkEnumInSubset,shapeModule.value.shapeType,Circle,Cone"
+                key="shapeModule.value.arcSpread"></ui-prop>
 
-            <ui-prop
-                type="dump"
-                showflag="checkEnumInSubset,shapeModule.value.shapeType,Circle,Cone"
-                key="shapeModule.value.arcSpeed"
-            ></ui-prop>
+            <ui-prop type="dump" showflag="checkEnumInSubset,shapeModule.value.shapeType,Circle,Cone"
+                key="shapeModule.value.arcSpeed"></ui-prop>
 
-            <ui-prop
-                type="dump"
-                showflag="checkEnumInSubset,shapeModule.value.shapeType,Cone"
-                key="shapeModule.value.length"
-            ></ui-prop>
+            <ui-prop type="dump" showflag="checkEnumInSubset,shapeModule.value.shapeType,Cone"
+                key="shapeModule.value.length"></ui-prop>
 
-            <ui-prop
-                type="dump"
-                showflag="checkEnumInSubset,shapeModule.value.shapeType,Box"
-                key="shapeModule.value.boxThickness"
-            ></ui-prop>
+            <ui-prop type="dump" showflag="checkEnumInSubset,shapeModule.value.shapeType,Box"
+                key="shapeModule.value.boxThickness"></ui-prop>
 
-            <ui-prop
-                type="dump"
-                key="shapeModule.value.position"
-            ></ui-prop>
+            <ui-prop type="dump" key="shapeModule.value.position"></ui-prop>
 
-            <ui-prop
-                type="dump"
-                key="shapeModule.value.rotation"
-            ></ui-prop>
+            <ui-prop type="dump" key="shapeModule.value.rotation"></ui-prop>
 
-            <ui-prop
-                type="dump"
-                key="shapeModule.value.scale"
-            ></ui-prop>
+            <ui-prop type="dump" key="shapeModule.value.scale"></ui-prop>
 
-            <ui-prop
-                type="dump"
-                key="shapeModule.value.alignToDirection"
-            ></ui-prop>
+            <ui-prop type="dump" key="shapeModule.value.alignToDirection"></ui-prop>
 
-            <ui-prop
-                type="dump"
-                key="shapeModule.value.randomDirectionAmount"
-            ></ui-prop>
+            <ui-prop type="dump" key="shapeModule.value.randomDirectionAmount"></ui-prop>
 
-            <ui-prop
-                type="dump"
-                key="shapeModule.value.sphericalDirectionAmount"
-            ></ui-prop>
+            <ui-prop type="dump" key="shapeModule.value.sphericalDirectionAmount"></ui-prop>
 
-            <ui-prop
-                type="dump"
-                key="shapeModule.value.randomPositionAmount"
-            ></ui-prop>
+            <ui-prop type="dump" key="shapeModule.value.randomPositionAmount"></ui-prop>
 
         </ui-section>
-        <ui-section
-            class="config" 
-            key="velocityOvertimeModule"
-            autoflag="true"
-        ></ui-section>
-        <ui-section
-            class="config" 
-            key="forceOvertimeModule"
-            autoflag="true"
-        ></ui-section>
-        
-        <ui-section
-            empty="true"
-            class="config"
-            key="sizeOvertimeModule"
-        >
-            <ui-prop
-                slot="header"
-                class="header"
-                type="dump"
-                key="sizeOvertimeModule.value.enable"
-                labelflag="sizeOvertimeModule"
-                empty="true"
-            >
+        <ui-section class="config" key="velocityOvertimeModule" autoflag="true"></ui-section>
+        <ui-section class="config" key="forceOvertimeModule" autoflag="true"></ui-section>
+
+        <ui-section empty="true" class="config" key="sizeOvertimeModule">
+            <ui-prop slot="header" class="header" type="dump" key="sizeOvertimeModule.value.enable"
+                labelflag="sizeOvertimeModule" empty="true">
                 <ui-checkbox></ui-checkbox>
                 <ui-label></ui-label>
             </ui-prop>
-            <ui-prop
-                type="dump"
-                key="sizeOvertimeModule.value.separateAxes"
-            ></ui-prop>
-            <ui-prop
-                type="dump"
-                showflag="!sizeOvertimeModule.value.separateAxes.value"
-                key="sizeOvertimeModule.value.size"
-            >
+            <ui-prop type="dump" key="sizeOvertimeModule.value.separateAxes"></ui-prop>
+            <ui-prop type="dump" showflag="!sizeOvertimeModule.value.separateAxes.value"
+                key="sizeOvertimeModule.value.size">
             </ui-prop>
-            <ui-prop
-                type="dump"
-                showflag="sizeOvertimeModule.value.separateAxes.value"
-                key="sizeOvertimeModule.value.x"
-            >
+            <ui-prop type="dump" showflag="sizeOvertimeModule.value.separateAxes.value"
+                key="sizeOvertimeModule.value.x">
             </ui-prop>
-            <ui-prop
-                type="dump"
-                showflag="sizeOvertimeModule.value.separateAxes.value"
-                key="sizeOvertimeModule.value.y"
-            >
+            <ui-prop type="dump" showflag="sizeOvertimeModule.value.separateAxes.value"
+                key="sizeOvertimeModule.value.y">
             </ui-prop>
-            <ui-prop
-                type="dump"
-                showflag="sizeOvertimeModule.value.separateAxes.value"
-                key="sizeOvertimeModule.value.z"
-            ></ui-prop>
+            <ui-prop type="dump" showflag="sizeOvertimeModule.value.separateAxes.value"
+                key="sizeOvertimeModule.value.z"></ui-prop>
 
         </ui-section>
 
-        <ui-section
-            empty="true"
-            class="config"
-            key="rotationOvertimeModule"
-        >
+        <ui-section empty="true" class="config" key="rotationOvertimeModule">
 
-            <ui-prop
-                slot="header"
-                class="header"
-                type="dump"
-                key="rotationOvertimeModule.value.enable"
-                labelflag="rotationOvertimeModule"
-                empty="true"
-            >
+            <ui-prop slot="header" class="header" type="dump" key="rotationOvertimeModule.value.enable"
+                labelflag="rotationOvertimeModule" empty="true">
                 <ui-checkbox></ui-checkbox>
                 <ui-label></ui-label>
             </ui-prop>
-            <ui-prop
-                type="dump"
-                key="rotationOvertimeModule.value.separateAxes"
-            >
+            <ui-prop type="dump" key="rotationOvertimeModule.value.separateAxes">
             </ui-prop>
-            <ui-prop
-                type="dump"
-                showflag="rotationOvertimeModule.value.separateAxes.value"
-                key="rotationOvertimeModule.value.x"
-            ></ui-prop>
-            <ui-prop
-                type="dump"
-                showflag="rotationOvertimeModule.value.separateAxes.value"
-                key="rotationOvertimeModule.value.y"
-            ></ui-prop>
-            <ui-prop
-                type="dump"
-                key="rotationOvertimeModule.value.z"
-            ></ui-prop>
+            <ui-prop type="dump" showflag="rotationOvertimeModule.value.separateAxes.value"
+                key="rotationOvertimeModule.value.x"></ui-prop>
+            <ui-prop type="dump" showflag="rotationOvertimeModule.value.separateAxes.value"
+                key="rotationOvertimeModule.value.y"></ui-prop>
+            <ui-prop type="dump" key="rotationOvertimeModule.value.z"></ui-prop>
 
         </ui-section>
-        <ui-section
-        class="config" 
-        key="colorOverLifetimeModule"
-        autoflag="true"
-        ></ui-section>
-        <ui-section
-        class="config" 
-        key="textureAnimationModule"
-        autoflag="true"
-        ></ui-section>
-        <ui-section
-            type="dump"
-            showflag="!renderer.value.useGPU.value"
-            key="limitVelocityOvertimeModule"
-            class="config"
-            autoflag="true"
-        ></ui-section>
-        <ui-section
-            empty="true"
-            class="config"
-            showflag="!renderer.value.useGPU.value"
-            key="trailModule"
-        >
-            <ui-prop
-                slot="header"
-                class="header"
-                type="dump"
-                key="trailModule.value.enable"
-                labelflag="trailModule"
-                empty="true"
-            >
+        <ui-section class="config" key="colorOverLifetimeModule" autoflag="true"></ui-section>
+        <ui-section class="config" key="textureAnimationModule" autoflag="true"></ui-section>
+        <ui-section type="dump" showflag="!renderer.value.useGPU.value" key="limitVelocityOvertimeModule" class="config"
+            autoflag="true"></ui-section>
+        <ui-section empty="true" class="config" showflag="!renderer.value.useGPU.value" key="trailModule">
+            <ui-prop slot="header" class="header" type="dump" key="trailModule.value.enable" labelflag="trailModule"
+                empty="true">
                 <ui-checkbox></ui-checkbox>
                 <ui-label></ui-label>
             </ui-prop>
-            <ui-prop
-                type="dump"
-                key="trailModule.value.mode"
-            ></ui-prop>
-            <ui-prop
-                type="dump"
-                key="trailModule.value.lifeTime"
-            ></ui-prop>
-            <ui-prop
-                type="dump"
-                key="trailModule.value.minParticleDistance"
-            ></ui-prop>
-            <ui-prop
-                type="dump"
-                key="trailModule.value.space"
-            ></ui-prop>
-            <ui-prop
-                type="dump"
-                key="trailModule.value.textureMode"
-            ></ui-prop>
-            <ui-prop
-                type="dump"
-                key="trailModule.value.widthFromParticle"
-            ></ui-prop>
-            <ui-prop
-                type="dump"
-                key="trailModule.value.widthRatio"
-            ></ui-prop>
-            <ui-prop
-                type="dump"
-                key="trailModule.value.colorFromParticle"
-            ></ui-prop>
-            <ui-prop
-                type="dump"
-                key="trailModule.value.colorOverTrail"
-            ></ui-prop>
-            <ui-prop
-                type="dump"
-                key="trailModule.value.colorOvertime"
-            ></ui-prop>
+            <ui-prop type="dump" key="trailModule.value.mode"></ui-prop>
+            <ui-prop type="dump" key="trailModule.value.lifeTime"></ui-prop>
+            <ui-prop type="dump" key="trailModule.value.minParticleDistance"></ui-prop>
+            <ui-prop type="dump" key="trailModule.value.space"></ui-prop>
+            <ui-prop type="dump" key="trailModule.value.textureMode"></ui-prop>
+            <ui-prop type="dump" key="trailModule.value.widthFromParticle"></ui-prop>
+            <ui-prop type="dump" key="trailModule.value.widthRatio"></ui-prop>
+            <ui-prop type="dump" key="trailModule.value.colorFromParticle"></ui-prop>
+            <ui-prop type="dump" key="trailModule.value.colorOverTrail"></ui-prop>
+            <ui-prop type="dump" key="trailModule.value.colorOvertime"></ui-prop>
 
         </ui-section>
-
-        <ui-prop
-            type="dump"
-            key="renderer"
-        ></ui-prop>
-
+        <ui-prop type="dump" key="renderer"></ui-prop>
     </div>
 
     <!-- 渲染其他没有接管的数据 -->
