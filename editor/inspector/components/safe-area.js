@@ -60,6 +60,7 @@ exports.ready = function () {
         }
     }
 };
+
 exports.update = function (dump) {
     for (const key in dump.value) {
         const info = dump.value[key];
