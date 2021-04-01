@@ -9,23 +9,14 @@ const excludeList = [
 exports.template = `
 <div class="sphere-light-component">
     <ui-prop type="dump" key="color"></ui-prop>
-
     <ui-prop type="dump" key="useColorTemperature"></ui-prop>
-
     <ui-prop type="dump" key="colorTemperature"></ui-prop>
-
     <ui-prop type="dump" key="size"></ui-prop>
-
     <ui-prop type="dump" key="range"></ui-prop>
-
     <ui-prop type="dump" key="term"></ui-prop>
-
     <ui-prop type="dump" showflag="term" key="luminance"></ui-prop>
-
     <ui-prop type="dump" showflag="notTerm" key="luminousPower"></ui-prop>
-
     <ui-prop type="dump" key="staticSettings"></ui-prop>
-
     <!-- Render other data that is not taken over -->
     <div id="customProps"></div>
 </div>
@@ -37,6 +28,7 @@ exports.$ = {
     customProps: '#customProps',
     term: 'ui-prop[key="term"]',
 };
+
 const uiElements = {
     term: {
         ready () {
@@ -92,6 +84,7 @@ exports.ready = function () {
         }
     }
 };
+
 exports.update = function (dump) {
     for (const key in dump.value) {
         const info = dump.value[key];
