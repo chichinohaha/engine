@@ -6,6 +6,7 @@ const excludeList = [
     'bounceDuration', 'horizontalScrollBar', 'verticalScrollBar',
     'scrollEvents', 'cancelInnerEvents',
 ];
+
 exports.template = `
 <div class="scroll-view-component">
     <ui-prop type="dump" key="content"></ui-prop>
@@ -28,6 +29,7 @@ exports.template = `
 exports.$ = {
     customProps: '#customProps',
 };
+
 const uiElements = {
     baseProps: {
         ready () {
@@ -77,6 +79,7 @@ exports.ready = function () {
         }
     }
 };
+
 exports.update = function (dump) {
     for (const key in dump.value) {
         const info = dump.value[key];
