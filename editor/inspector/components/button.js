@@ -2,13 +2,13 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 const propUtils = require('../utils/prop');
 
-const basePropList = [
+const EXCLUDE_PROPLIST = [
     'target', 'interactable', 'transition', 'disabledColor',
     'normalColor', 'pressedColor', 'hoverColor', 'disabledSprite',
     'normalSprite', 'pressedSprite', 'hoverSprite', 'disabledSprite',
     'zoomScale', 'duration', 'clickEvents',
 ];
-const uiElements = {
+const ELEMENTS = {
     baseProps: {
         ready () {
             this.$.baseProps = this.$this.querySelectorAll('ui-prop:not(.customProp)');
@@ -16,7 +16,7 @@ const uiElements = {
                 const key = element.getAttribute('key');
                 if (key === 'transition') {
                     element.addEventListener('change-dump', (event) => {
-                        uiElements.baseProps.update.call(this);
+                        ELEMENTS.baseProps.update.call(this);
                     });
                 }
             });
@@ -40,7 +40,7 @@ const uiElements = {
     },
     customProp: {
         update () {
-            this.$.customProp.replaceChildren(...propUtils.getCustomPropElements(basePropList, this.dump, (element, prop) => {
+            this.$.customProp.replaceChildren(...propUtils.getCustomPropElements(EXCLUDE_PROPLIST, this.dump, (element, prop) => {
                 element.className = 'customProp';
                 const isShow = prop.dump.visible;
                 if (isShow) {
@@ -72,7 +72,7 @@ exports.template = `
     <ui-prop type="dump" key="duration" showflag="3"></ui-prop>
     <ui-prop type="dump" key="clickEvents"></ui-prop>
 
-    <!-- 渲染其他没有接管的数据 -->
+    <!-- Render other data that is not taken over -->
     <div id="customProp"></div>
 </div>
 `;
@@ -83,22 +83,21 @@ exports.update = function (dump) {
         if (!info.visible) {
             continue;
         }
-        info.displayName = info.displayName || key;
         if (dump.values) {
             info.values = dump.values.map((value) => value[key].value);
         }
     }
     this.dump = dump;
-    for (const key in uiElements) {
-        const element = uiElements[key];
+    for (const key in ELEMENTS) {
+        const element = ELEMENTS[key];
         if (typeof element.update === 'function') {
             element.update.call(this);
         }
     }
 };
 exports.ready = function () {
-    for (const key in uiElements) {
-        const element = uiElements[key];
+    for (const key in ELEMENTS) {
+        const element = ELEMENTS[key];
         if (typeof element.ready === 'function') {
             element.ready.call(this);
         }
