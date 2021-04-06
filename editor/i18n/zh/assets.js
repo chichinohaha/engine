@@ -13,6 +13,7 @@ module.exports = {
             FontSize: 'Font Size',
         },
         particle:{
+            spriteFrame:'Sprite Frame',
             spriteFrameTip:'Sprite Frame'
         },
         erpTextureCube: {
@@ -40,11 +41,12 @@ module.exports = {
             executionScope: '执行作用域',
             global: '顶层',
             enclosed: '独立',
-            executionScopeTip: '不对该插件脚本做任何编译或包装。',
             loadPluginInWeb: '允许 Web 平台加载',
             loadPluginInEditor: '允许编辑器加载',
             loadPluginInNative: '允许 Native 平台加载',
             simulateGlobals: '模拟全局变量',
+            executionScopeTip: '不对该插件脚本做任何编译或包装。',
+            executionScopeEnclosed: '模拟全局变量',
             pluginTip: 'Import As Plugin',
             dependenciesTip: 'Dependencies',
             globalTip: 'Global',
@@ -253,6 +255,22 @@ module.exports = {
                     },
                 },
             },
+        },
+        textureCube: {
+            anisotropy: 'Anisotropy',
+            anisotropyTip: 'Anisotropy',
+            minFilter: 'Min Filter',
+            minFilterTip: 'Min Filter',
+            magFilter: 'Mag Filter',
+            magFilterTip: 'Mag Filter',
+            mipFilter: 'Mip Filter',
+            mipFilterTip: 'Mip Filter',
+            wrapModeS: 'Wrap Mode S',
+            wrapModeSTip: 'Wrap Mode S',
+            wrapModeT: 'Wrap Mode T',
+            wrapModeTTip: 'Wrap Mode T',
+            modeWarn:
+            '警告：WebGL 1.0 平台不支持非 2 次幂贴图的 repeat 过滤模式，运行时会自动改为 clamp-to-edge 模式，这会使材质的 tilingOffset 等属性完全失效。',
         },
     },
 };
