@@ -50,3 +50,16 @@ exports.getCustomPropElements = function (excludeList, dump, onElementCreated) {
     });
     return customPropElements;
 };
+
+/**
+ * 工具函数：设置只读状态
+ * @param {object} data  dump | asset
+ * @param element
+ */
+exports.setReadonly = function (data, element) {
+    if (data && data.readonly) {
+        element.setAttribute('disabled', 'true');
+    } else {
+        element.removeAttribute('disabled');
+    }
+};

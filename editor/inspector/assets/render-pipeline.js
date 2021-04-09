@@ -1,3 +1,5 @@
+const { setReadonly } = require('../utils/prop');
+
 exports.template = `
 <section class="asset-render-pipeline">
     <div class="header">
@@ -46,6 +48,8 @@ const Elements = {
                 optionsHtml += `<option value="${index}">${pipeline.name}</option>`;
             });
             panel.$.pipelinesSelect.innerHTML = optionsHtml;
+
+            setReadonly(panel.asset, panel.$.pipelinesSelect);
         }
     },
     pipeline: {
