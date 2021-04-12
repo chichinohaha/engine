@@ -52,14 +52,155 @@ exports.getCustomPropElements = function (excludeList, dump, onElementCreated) {
 };
 
 /**
- * 工具函数：设置只读状态
- * @param {object} data  dump | asset
+ * 工具函数：循环设置资源数据中的 readonly
+ */
+exports.loopSetAssetDumpDataReadonly = function (dump) {
+    if (typeof dump !== 'object') {
+        return;
+    }
+
+    if (dump.readonly === undefined) {
+        return;
+    }
+
+    dump.readonly = true;
+
+    if (dump.isArray) {
+        for (let i = 0; i < dump.value.length; i++) {
+            exports.loopSetAssetDumpDataReadonly(dump.value[i]);
+        }
+        return;
+    }
+
+    for (const key in dump.value) {
+        exports.loopSetAssetDumpDataReadonly(dump.value[key]);
+    }
+};
+
+/**
+ * 工具函数：设置不可用
+ * @param {object} data  dump | function
  * @param element
  */
-exports.setReadonly = function (data, element) {
-    if (data && data.readonly) {
+exports.setDisabled = function (data, element) {
+    let disabled = data;
+
+    if (typeof data === 'function') {
+        disabled = data();
+    }
+
+    if (disabled === true) {
         element.setAttribute('disabled', 'true');
     } else {
         element.removeAttribute('disabled');
     }
+};
+
+/**
+ * 工具函数：设置只读状态
+ * @param {object} data  dump | function
+ * @param element
+ */
+exports.setReadonly = function (data, element) {
+    let readonly = data;
+
+    if (typeof data === 'function') {
+        readonly = data();
+    }
+
+    if (readonly === true) {
+        element.setAttribute('readonly', 'true');
+    } else {
+        element.removeAttribute('readonly');
+    }
+
+    if (element.render) {
+        element.dump.readonly = readonly;
+        element.render();
+    }
+};
+
+/**
+ * 工具函数：设置显示状态
+ * @param {object} data  dump | function
+ * @param element
+ */
+exports.setHidden = function (data, element) {
+    let hidden = data;
+
+    if (typeof data === 'function') {
+        hidden = data();
+    }
+
+    if (hidden === true) {
+        element.setAttribute('hidden', '');
+    } else {
+        element.removeAttribute('hidden');
+    }
+};
+
+exports.updatePropByDump = function (panel, dump, Elements) {
+    const list = [];
+
+    Object.keys(dump.value).forEach((key) => {
+        const dumpdata = dump.value[key];
+
+        dumpdata.displayOrder = dumpdata.displayOrder === undefined ? 0 : Number(dumpdata.displayOrder);
+        dumpdata.displayOrder += 100;
+
+        const element = Elements[key];
+        if (element && element.displayOrder !== undefined) {
+            dumpdata.displayOrder = element.displayOrder;
+        }
+
+        list.push({
+            key,
+            dumpdata,
+        });
+    });
+
+    list.sort((a, b) => a.dumpdata.displayOrder - b.dumpdata.displayOrder);
+
+    list.forEach((item) => {
+        const { key, dumpdata } = item;
+        const element = Elements[key];
+
+        if (!panel.$[key]) {
+            // 元素不存在且数据告知不需要显示，终止渲染
+            if (!dumpdata.visible) {
+                return;
+            }
+
+            panel.$[key] = document.createElement('ui-prop');
+            panel.$[key].setAttribute('type', 'dump');
+            panel.$[key].render(dumpdata);
+
+            panel.$.container.appendChild(panel.$[key]);
+
+            if (element && element.ready) {
+                element.ready.call(panel, panel.$[key]);
+            }
+        } else {
+            // 元素存在，但此时数据告知不需要显示
+            if (!dumpdata.visible) {
+                // 已挂载的需要撤销
+                if (panel.$[key].parentNode === panel.$.container) {
+                    panel.$[key].remove();
+
+                    if (element && element.remove) {
+                        element.remove.call(panel, panel.$[key]);
+                    }
+                }
+
+                // 终止
+                return;
+            }
+
+            panel.$[key].render(dumpdata);
+
+            if (element && element.update) {
+                element.update.call(panel, panel.$[key]);
+            }
+        }
+    });
 };
