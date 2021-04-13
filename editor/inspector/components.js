@@ -8,7 +8,6 @@ module.exports = {
     'cc.ParticleSystem2D': join(__dirname, './components/particle-system-2d.js'),
     'cc.PolygonCollider2D': join(__dirname, './components/polygon-collider.js'),
     'cc.RichText': join(__dirname, './components/rich-text.js'),
-    'cc.Slider': join(__dirname, './components/slider.js'),
     'cc.Sprite': join(__dirname, './components/sprite.js'),
     'cc.SafeArea': join(__dirname, './components/safe-area.js'),
     'cc.SpotLight': join(__dirname, './components/spot-light.js'),
