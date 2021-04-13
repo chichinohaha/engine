@@ -139,12 +139,14 @@ exports.setHidden = function (data, element) {
     }
 };
 
-exports.updatePropByDump = function (panel, dump, Elements) {
+exports.updatePropByDump = function (panel, dump) {
+    panel.dump = dump;
+
     const children = [];
 
     Object.keys(dump.value).forEach((key) => {
         const dumpdata = dump.value[key];
-        const element = Elements[key];
+        const element = panel.elements[key];
 
         if (!panel.$[key]) {
             // 元素不存在且数据告知不需要显示，终止渲染
@@ -183,7 +185,7 @@ exports.updatePropByDump = function (panel, dump, Elements) {
 
     children.forEach(child => {
         const key = child.dump.name;
-        const element = Elements[key];
+        const element = panel.elements[key];
 
         if (element && element.ready) {
             element.ready.call(panel, panel.$[key]);

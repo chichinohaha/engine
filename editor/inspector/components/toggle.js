@@ -1,14 +1,17 @@
-const { template, $, update, Elements } = require('./button');
+const { template, $, update, elements } = require('./button');
 
 exports.template = template;
 exports.$ = $;
 exports.update = update;
-exports.update = update;
-exports.Elements = Object.assign(Elements, {
-    isChecked: {
-        displayOrder: 2,
-    },
-    checkMark: {
-        displayOrder: 2,
-    },
-});
+
+exports.ready = function () {
+    this.elements = Object.assign(elements, {
+        isChecked: {
+            displayOrder: 2,
+        },
+        checkMark: {
+            displayOrder: 2,
+        },
+    });
+};
+

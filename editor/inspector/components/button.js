@@ -1,6 +1,13 @@
-const { updatePropByDump, setHidden } = require('../utils/prop');
+const { template, $, update } = require('./base');
 
-const Elements = {
+exports.template = template;
+exports.$ = $;
+exports.update = update;
+
+const { setHidden } = require('../utils/prop');
+
+// 这样写是因为 cc.Toggle 可以复用这块代码
+exports.elements = {
     target: {
         displayOrder: 0,
     },
@@ -17,17 +24,17 @@ const Elements = {
     },
     pressedColor: {
         update(element) {
-            Elements.normalColor.update.call(this, element);
+            this.elements.normalColor.update.call(this, element);
         },
     },
     hoverColor: {
         update(element) {
-            Elements.normalColor.update.call(this, element);
+            this.elements.normalColor.update.call(this, element);
         },
     },
     disabledColor: {
         update(element) {
-            Elements.normalColor.update.call(this, element);
+            this.elements.normalColor.update.call(this, element);
         },
     },
     normalSprite: {
@@ -37,17 +44,17 @@ const Elements = {
     },
     pressedSprite: {
         update(element) {
-            Elements.normalSprite.update.call(this, element);
+            this.elements.normalSprite.update.call(this, element);
         },
     },
     hoverSprite: {
         update(element) {
-            Elements.normalSprite.update.call(this, element);
+            this.elements.normalSprite.update.call(this, element);
         },
     },
     disabledSprite: {
         update(element) {
-            Elements.normalSprite.update.call(this, element);
+            this.elements.normalSprite.update.call(this, element);
         },
     },
     zoomScale: {
@@ -57,23 +64,11 @@ const Elements = {
     },
     duration: {
         update(element) {
-            Elements.zoomScale.update.call(this, element);
+            this.elements.zoomScale.update.call(this, element);
         },
     },
 }
 
-exports.template = `
-<div class="component-container">
-</div>
-`;
-
-exports.$ = {
-    componentContainer: '.component-container',
+exports.ready = function () {
+    this.elements = exports.elements;
 };
-
-exports.update = function (dump) {
-    this.dump = dump;
-    updatePropByDump(this, dump, Elements);
-};
-
-exports.Elements = Elements;
