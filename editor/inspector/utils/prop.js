@@ -140,29 +140,10 @@ exports.setHidden = function (data, element) {
 };
 
 exports.updatePropByDump = function (panel, dump, Elements) {
-    const list = [];
+    const children = [];
 
     Object.keys(dump.value).forEach((key) => {
         const dumpdata = dump.value[key];
-
-        dumpdata.displayOrder = dumpdata.displayOrder === undefined ? 0 : Number(dumpdata.displayOrder);
-        dumpdata.displayOrder += 100;
-
-        const element = Elements[key];
-        if (element && element.displayOrder !== undefined) {
-            dumpdata.displayOrder = element.displayOrder;
-        }
-
-        list.push({
-            key,
-            dumpdata,
-        });
-    });
-
-    list.sort((a, b) => a.dumpdata.displayOrder - b.dumpdata.displayOrder);
-
-    list.forEach((item) => {
-        const { key, dumpdata } = item;
         const element = Elements[key];
 
         if (!panel.$[key]) {
@@ -175,32 +156,42 @@ exports.updatePropByDump = function (panel, dump, Elements) {
             panel.$[key].setAttribute('type', 'dump');
             panel.$[key].render(dumpdata);
 
-            panel.$.container.appendChild(panel.$[key]);
+            panel.$[key].displayOrder = dumpdata.displayOrder === undefined ? 0 : Number(dumpdata.displayOrder);
+            panel.$[key].displayOrder += 100;
 
-            if (element && element.ready) {
-                element.ready.call(panel, panel.$[key]);
+            if (element && element.displayOrder !== undefined) {
+                panel.$[key].displayOrder = element.displayOrder;
             }
+
+            children.push(panel.$[key]);
         } else {
-            // 元素存在，但此时数据告知不需要显示
+            // 元素存在，但此时数据告知不需要显示，终止
             if (!dumpdata.visible) {
-                // 已挂载的需要撤销
-                if (panel.$[key].parentNode === panel.$.container) {
-                    panel.$[key].remove();
-
-                    if (element && element.remove) {
-                        element.remove.call(panel, panel.$[key]);
-                    }
-                }
-
-                // 终止
                 return;
             }
 
             panel.$[key].render(dumpdata);
-
-            if (element && element.update) {
-                element.update.call(panel, panel.$[key]);
-            }
         }
+
+        children.push(panel.$[key]);
     });
+
+    // 重新排序
+    children.sort((a, b) => a.displayOrder - b.displayOrder);
+
+    panel.$.componentContainer.replaceChildren(...children);
+
+    children.forEach(child => {
+        const key = child.dump.name;
+        const element = Elements[key];
+
+        if (element && element.ready) {
+            element.ready.call(panel, panel.$[key]);
+            element.ready = undefined; // ready 只需要执行一次
+        }
+
+        if (element && element.update) {
+            element.update.call(panel, panel.$[key]);
+        }
+    })
 };
