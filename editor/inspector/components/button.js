@@ -75,3 +75,5 @@ exports.update = function (dump) {
     this.dump = dump;
     updatePropByDump(this, dump, Elements);
 };
+
+exports.Elements = Elements;
