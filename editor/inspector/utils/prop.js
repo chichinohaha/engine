@@ -142,6 +142,10 @@ exports.setHidden = function (data, element) {
 exports.updatePropByDump = function (panel, dump) {
     panel.dump = dump;
 
+    if (!panel.elements) {
+        panel.elements = {};
+    }
+
     const children = [];
 
     Object.keys(dump.value).forEach((key) => {
