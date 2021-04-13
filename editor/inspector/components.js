@@ -3,7 +3,6 @@ const { join } = require('path');
 module.exports = {
     'cc.Button': join(__dirname, './components/button.js'),
     'cc.Layout': join(__dirname, './components/layout.js'),
-    'cc.PageView': join(__dirname, './components/page-view.js'),
     'cc.PrefabLink': join(__dirname, './components/prefab-link.js'),
     'cc.ParticleSystem': join(__dirname, './components/particle-system.js'),
     'cc.ParticleSystem2D': join(__dirname, './components/particle-system-2d.js'),
