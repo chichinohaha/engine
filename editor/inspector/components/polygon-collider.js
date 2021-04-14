@@ -20,7 +20,14 @@ exports.ready = function () {
                 $input.after($button);
 
                 $button.addEventListener('confirm', () => {
-                    Editor.Message.request('scene', 'regenerate-polygon-2d-points', this.dump.value.uuid.value);
+                    let values = [this.dump.value];
+                    if (this.dump.values) {
+                        values = this.dump.values;
+                    }
+
+                    values.forEach((item) => {
+                        Editor.Message.request('scene', 'regenerate-polygon-2d-points', item.uuid.value);
+                    });
                 });
             },
         },
