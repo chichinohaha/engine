@@ -12,5 +12,5 @@ exports.ready = function () {
     const label = document.createElement('ui-label');
     tooltip.appendChild(label);
     label.setAttribute('style', 'display: inline-block; padding: 10px;');
-    label.setAttribute('value', 'i18n:ENGINE.components.prefab_link.brief_help');
+    label.setAttribute('value', 'i18n:ENGINE.components.safe_area.brief_help');
 };
