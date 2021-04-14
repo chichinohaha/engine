@@ -162,14 +162,16 @@ exports.updatePropByDump = function (panel, dump) {
             panel.$[key].setAttribute('type', 'dump');
             panel.$[key].render(dumpdata);
 
+            /**
+             * 上升引擎里定义，而自定义排序的范围在 0 - 100;
+             * 引擎里如果定义 displayOrder 为负数，小于 -100，则会优先于自定义的排序
+             */
             panel.$[key].displayOrder = dumpdata.displayOrder === undefined ? 0 : Number(dumpdata.displayOrder);
             panel.$[key].displayOrder += 100;
 
             if (element && element.displayOrder !== undefined) {
                 panel.$[key].displayOrder = element.displayOrder;
             }
-
-            children.push(panel.$[key]);
         } else {
             // 元素存在，但此时数据告知不需要显示，终止
             if (!dumpdata.visible) {
