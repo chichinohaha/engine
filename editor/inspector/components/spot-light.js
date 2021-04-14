@@ -1,4 +1,4 @@
-const { template, $, update, ready } = require('./sphere-light');
+const { template, $, update, ready } = require('./base-light');
 
 exports.template = template;
 exports.$ = $;

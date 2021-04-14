@@ -4,7 +4,7 @@ exports.template = template;
 exports.$ = $;
 exports.update = update;
 
-const { setHidden } = require('../utils/prop');
+const { setHidden, isMultipleInvalid } = require('../utils/prop');
 
 exports.ready = function () {
     this.elements = {
@@ -13,8 +13,8 @@ exports.ready = function () {
         },
         horizontalScrollBar: {
             displayOrder: 1,
-            update(element) {
-                setHidden(!this.dump.value.horizontal.value, element);
+            update(element, dump) {
+                setHidden(isMultipleInvalid(dump.horizontal) || !dump.horizontal.value, element);
             },
         },
         vertical: {
@@ -22,8 +22,8 @@ exports.ready = function () {
         },
         verticalScrollBar: {
             displayOrder: 3,
-            update(element) {
-                setHidden(!this.dump.value.vertical.value, element);
+            update(element, dump) {
+                setHidden(isMultipleInvalid(dump.vertical) || !dump.vertical.value, element);
             },
         },
         inertia: {
@@ -31,8 +31,8 @@ exports.ready = function () {
         },
         brake: {
             displayOrder: 5,
-            update(element) {
-                setHidden(!this.dump.value.inertia.value, element);
+            update(element, dump) {
+                setHidden(isMultipleInvalid(dump.inertia) || !dump.inertia.value, element);
             },
         },
         elastic: {
@@ -40,8 +40,8 @@ exports.ready = function () {
         },
         bounceDuration: {
             displayOrder: 7,
-            update(element) {
-                setHidden(!this.dump.value.elastic.value, element);
+            update(element, dump) {
+                setHidden(isMultipleInvalid(dump.elastic) || !dump.elastic.value, element);
             },
         },
     };

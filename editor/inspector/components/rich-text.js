@@ -4,7 +4,7 @@ exports.template = template;
 exports.$ = $;
 exports.update = update;
 
-const { setHidden } = require('../utils/prop');
+const { setHidden, isMultipleInvalid } = require('../utils/prop');
 
 exports.ready = function () {
     this.elements = {
@@ -16,20 +16,20 @@ exports.ready = function () {
         },
         fontFamily: {
             displayOrder: 2,
-            update(element) {
-                setHidden(!this.dump.value.useSystemFont.value, element);
+            update(element, dump) {
+                setHidden(isMultipleInvalid(dump.useSystemFont) || !dump.useSystemFont.value, element);
             },
         },
         cacheMode: {
             displayOrder: 3,
-            update(element) {
-                setHidden(!this.dump.value.useSystemFont.value, element);
+            update(element, dump) {
+                this.elements.fontFamily.update.call(this, element, dump);
             },
         },
         font: {
             displayOrder: 4,
-            update(element) {
-                setHidden(!!this.dump.value.useSystemFont.value, element);
+            update(element, dump) {
+                setHidden(isMultipleInvalid(dump.useSystemFont) || !!dump.useSystemFont.value, element);
             },
         },
     };

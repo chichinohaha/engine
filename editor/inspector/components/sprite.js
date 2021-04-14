@@ -4,7 +4,7 @@ exports.template = template;
 exports.$ = $;
 exports.update = update;
 
-const { setHidden, setReadonly } = require('../utils/prop');
+const { setHidden, setReadonly, isMultipleInvalid } = require('../utils/prop');
 
 exports.ready = function () {
     this.elements = {
@@ -13,27 +13,27 @@ exports.ready = function () {
         },
         fillType: {
             displayOrder: 1,
-            update(element) {
-                setHidden(this.dump.value.type.value !== 3, element);
+            update(element, dump) {
+                setHidden(isMultipleInvalid(dump.type) || dump.type.value !== 3, element);
             },
         },
         fillCenter: {
             displayOrder: 2,
-            update(element) {
-                this.elements.fillType.update.call(this, element);
-                setReadonly(this.dump.value.fillType.value !== 2, element);
+            update(element, dump) {
+                this.elements.fillType.update.call(this, element, dump);
+                setReadonly(dump.fillType.value !== 2, element);
             },
         },
         fillStart: {
             displayOrder: 3,
-            update(element) {
-                this.elements.fillType.update.call(this, element);
+            update(element, dump) {
+                this.elements.fillType.update.call(this, element, dump);
             },
         },
         fillRange: {
             displayOrder: 4,
-            update(element) {
-                this.elements.fillType.update.call(this, element);
+            update(element, dump) {
+                this.elements.fillType.update.call(this, element, dump);
             },
         },
     };

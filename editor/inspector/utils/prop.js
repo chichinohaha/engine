@@ -187,17 +187,30 @@ exports.updatePropByDump = function (panel, dump) {
 
     panel.$.componentContainer.replaceChildren(...children);
 
-    children.forEach(child => {
+    children.forEach((child) => {
         const key = child.dump.name;
         const element = panel.elements[key];
 
         if (element && element.ready) {
-            element.ready.call(panel, panel.$[key]);
+            element.ready.call(panel, panel.$[key], dump.value);
             element.ready = undefined; // ready 只需要执行一次
         }
 
         if (element && element.update) {
-            element.update.call(panel, panel.$[key]);
+            element.update.call(panel, panel.$[key], dump.value);
         }
-    })
+    });
+};
+
+/**
+ * 工具函数：检查多选后属性值是否一致
+ */
+exports.isMultipleInvalid = function (dump) {
+    let invalid = false;
+
+    if (dump.values && dump.values.some((ds) => ds !== dump.value)) {
+        invalid = true;
+    }
+
+    return invalid;
 };

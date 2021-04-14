@@ -4,7 +4,7 @@ exports.template = template;
 exports.$ = $;
 exports.update = update;
 
-const { setHidden } = require('../utils/prop');
+const { setHidden, isMultipleInvalid } = require('../utils/prop');
 
 exports.ready = function () {
     this.elements = {
@@ -13,98 +13,99 @@ exports.ready = function () {
         },
         affectedByScale: {
             displayOrder: 1,
-            update(element) {
-                setHidden(this.dump.value.type.value === 0, element);
+            update(element, dump) {
+                setHidden(isMultipleInvalid(dump.type) || dump.type.value === 0, element);
             },
         },
         resizeMode: {
             displayOrder: 2,
-            update(element) {
-                setHidden(this.dump.value.type.value === 0, element);
-            },
         },
         cellSize: {
             displayOrder: 3,
-            update(element) {
-                setHidden(this.dump.value.type.value !== 3 && this.dump.value.resizeMode.value !== 2, element);
+            update(element, dump) {
+                setHidden(
+                    isMultipleInvalid(dump.type) ||
+                        (dump.type.value !== 3 && dump.resizeMode.value !== 2),
+                    element,
+                );
             },
         },
         startAxis: {
             displayOrder: 4,
-            update(element) {
-                setHidden(this.dump.value.type.value !== 3, element);
+            update(element, dump) {
+                setHidden(isMultipleInvalid(dump.type) || dump.type.value !== 3, element);
             },
         },
         paddingLeft: {
             displayOrder: 4,
-            update(element) {
-                setHidden(this.dump.value.type.value === 0 || this.dump.value.type.value === 2, element);
+            update(element, dump) {
+                setHidden(isMultipleInvalid(dump.type) || dump.type.value === 0 || dump.type.value === 2, element);
             },
         },
         paddingRight: {
             displayOrder: 5,
-            update(element) {
-                this.elements.paddingLeft.update.call(this, element);
+            update(element, dump) {
+                this.elements.paddingLeft.update.call(this, element, dump);
             },
         },
         paddingTop: {
             displayOrder: 4,
-            update(element) {
-                setHidden(this.dump.value.type.value === 0 || this.dump.value.type.value === 1, element);
+            update(element, dump) {
+                setHidden(isMultipleInvalid(dump.type) || dump.type.value === 0 || dump.type.value === 1, element);
             },
         },
         paddingBottom: {
             displayOrder: 5,
-            update(element) {
-                this.elements.paddingTop.update.call(this, element);
+            update(element, dump) {
+                this.elements.paddingTop.update.call(this, element, dump);
             },
         },
         spacingX: {
             displayOrder: 6,
-            update(element) {
-                this.elements.paddingLeft.update.call(this, element);
+            update(element, dump) {
+                this.elements.paddingLeft.update.call(this, element, dump);
             },
         },
         spacingY: {
             displayOrder: 7,
-            update(element) {
-                this.elements.paddingTop.update.call(this, element);
+            update(element, dump) {
+                this.elements.paddingTop.update.call(this, element, dump);
             },
         },
         horizontalDirection: {
             displayOrder: 8,
-            update(element) {
-                this.elements.paddingLeft.update.call(this, element);
+            update(element, dump) {
+                this.elements.paddingLeft.update.call(this, element, dump);
             },
         },
         verticalDirection: {
             displayOrder: 9,
-            update(element) {
-                this.elements.paddingTop.update.call(this, element);
+            update(element, dump) {
+                this.elements.paddingTop.update.call(this, element, dump);
             },
         },
         alignHorizontal: {
             displayOrder: 10,
-            update(element) {
-                this.elements.paddingLeft.update.call(this, element);
+            update(element, dump) {
+                this.elements.paddingLeft.update.call(this, element, dump);
             },
         },
         alignVertical: {
             displayOrder: 11,
-            update(element) {
-                this.elements.paddingTop.update.call(this, element);
+            update(element, dump) {
+                this.elements.paddingTop.update.call(this, element, dump);
             },
         },
         constraint: {
             displayOrder: 12,
-            update(element) {
-                setHidden(this.dump.value.type.value !== 3, element);
+            update(element, dump) {
+                setHidden(isMultipleInvalid(dump.type) || dump.type.value !== 3, element);
             },
         },
         constraintNum: {
             displayOrder: 13,
-            update(element) {
-                setHidden(this.dump.value.type.value !== 3 || this.dump.value.constraint.value === 0, element);
+            update(element, dump) {
+                setHidden(isMultipleInvalid(dump.type) || dump.type.value !== 3 || dump.constraint.value === 0, element);
             },
         },
     };
