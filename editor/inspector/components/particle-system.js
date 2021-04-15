@@ -497,12 +497,6 @@ exports.ready = function () {
     }
 };
 exports.update = function (dump) {
-    for (const key in dump.value) {
-        const info = dump.value[key];
-        if (dump.values) {
-            info.values = dump.values.map((value) => value[key].value);
-        }
-    }
     this.dump = dump;
     for (const key in uiElements) {
         const element = uiElements[key];
