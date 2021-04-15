@@ -488,7 +488,6 @@ const uiElements = {
 exports.$ = {
     customProps: '#customProps',
     emitFromSelect: '#emitFromSelect',
-    startSizeX: 'ui-prop[key="startSizeX"]',
 };
 exports.ready = function () {
     for (const key in uiElements) {
