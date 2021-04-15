@@ -447,7 +447,6 @@ const uiElements = {
                     if (isShow) {
                         element.render(dump);
                     }
-                    element.style = isShow ? '' : 'display: none;';
                 } else {
                     const label = element.querySelector('ui-label');
                     if (label) {
@@ -469,8 +468,8 @@ const uiElements = {
                     }
 
                     element.dump = dump;
-                    element.style = isShow ? '' : 'display: none;';
                 }
+                element.style = isShow ? '' : 'display: none;';
             });
         },
     },
