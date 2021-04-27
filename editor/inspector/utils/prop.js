@@ -251,7 +251,7 @@ exports.updatePropByDump = function (panel, dump) {
 exports.isMultipleInvalid = function (dump) {
     let invalid = false;
 
-    if (dump && dump.values && dump.values.some((ds) => ds !== dump.value)) {
+    if (dump.values && dump.values.some((ds) => ds !== dump.value)) {
         invalid = true;
     }
 
