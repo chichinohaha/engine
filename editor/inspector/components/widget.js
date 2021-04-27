@@ -537,12 +537,9 @@ exports.methods = {
         }
         return dimension;
     },
-    isInvalid(key) {
-        if (Array.isArray(this.dump.value[key].values)) {
-            return this.dump.value[key].values.some((value) => value !== this.dump.value[key].value);
-        }
-
-        return false;
+    isInvalid (key) {
+        const dump = this.dump.value[key];
+        return propUtils.isMultipleInvalid(dump);
     },
     update () {
         for (const key in uiElements) {
@@ -554,6 +551,9 @@ exports.methods = {
     },
     change (key, newValue) {
         this.dump.value[key].value = newValue;
+        if (this.dump.value[key].values) {
+            this.dump.value[key].values.forEach((value, index) => this.dump.value[key].values[index] = newValue);
+        }
         this.$refs.summitProp.dump = this.dump.value[key];
         this.$refs.summitProp.dispatch('change-dump');
     },
