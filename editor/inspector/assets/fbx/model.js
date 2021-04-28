@@ -98,7 +98,16 @@ exports.$ = {
     meshOptimizerNOQCheckbox: '.meshOptimizer-noq-checkbox',
     meshOptimizerVCheckbox: '.meshOptimizer-v-checkbox',
 };
-
+const USERDATA_DEFAULT_VALUE = {
+    meshOptimizerOptions: {
+        si: 1,
+        sa: false,
+        kn: false,
+        ke: false,
+        noq: true,    
+        v: true,
+    },
+}
 /**
  * attribute corresponds to the edit element
  */
@@ -204,7 +213,7 @@ const Elements = {
         update() {
             const panel = this;
 
-            panel.$.meshOptimizerSISlider.value = panel.getDefault(panel.meta.userData.meshOptimizerOptions, 1, 'si');
+            panel.$.meshOptimizerSISlider.value = panel.getDefault(panel.meta.userData.meshOptimizerOptions, USERDATA_DEFAULT_VALUE.si, 'si');
 
             panel.updateMeshOptimizerInvalid(panel.$.meshOptimizerSISlider, 'si');
             panel.updateReadonly(panel.$.meshOptimizerSISlider);
@@ -218,7 +227,7 @@ const Elements = {
         update() {
             const panel = this;
 
-            panel.$.meshOptimizerSACheckbox.value = panel.getDefault(panel.meta.userData.meshOptimizerOptions, false, 'sa');
+            panel.$.meshOptimizerSACheckbox.value = panel.getDefault(panel.meta.userData.meshOptimizerOptions, USERDATA_DEFAULT_VALUE.sa, 'sa');
 
             panel.updateMeshOptimizerInvalid(panel.$.meshOptimizerSACheckbox, 'sa');
             panel.updateReadonly(panel.$.meshOptimizerSACheckbox);
@@ -238,7 +247,7 @@ const Elements = {
         update() {
             const panel = this;
 
-            panel.$.meshOptimizerKNCheckbox.value = panel.getDefault(panel.meta.userData.meshOptimizerOptions, false, 'kn');
+            panel.$.meshOptimizerKNCheckbox.value = panel.getDefault(panel.meta.userData.meshOptimizerOptions, USERDATA_DEFAULT_VALUE.kn, 'kn');
 
             panel.updateMeshOptimizerInvalid(panel.$.meshOptimizerKNCheckbox, 'kn');
             panel.updateReadonly(panel.$.meshOptimizerKNCheckbox);
@@ -252,7 +261,7 @@ const Elements = {
         update() {
             const panel = this;
 
-            panel.$.meshOptimizerKECheckbox.value = panel.getDefault(panel.meta.userData.meshOptimizerOptions, false, 'ke');
+            panel.$.meshOptimizerKECheckbox.value = panel.getDefault(panel.meta.userData.meshOptimizerOptions, USERDATA_DEFAULT_VALUE.ke, 'ke');
 
             panel.updateMeshOptimizerInvalid(panel.$.meshOptimizerKECheckbox, 'ke');
             panel.updateReadonly(panel.$.meshOptimizerKECheckbox);
@@ -266,7 +275,7 @@ const Elements = {
         update() {
             const panel = this;
 
-            panel.$.meshOptimizerNOQCheckbox.value = panel.getDefault(panel.meta.userData.meshOptimizerOptions, true, 'noq');
+            panel.$.meshOptimizerNOQCheckbox.value = panel.getDefault(panel.meta.userData.meshOptimizerOptions, USERDATA_DEFAULT_VALUE.noq, 'noq');
 
             panel.updateMeshOptimizerInvalid(panel.$.meshOptimizerNOQCheckbox, 'noq');
             panel.updateReadonly(panel.$.meshOptimizerNOQCheckbox);
@@ -280,7 +289,7 @@ const Elements = {
         update() {
             const panel = this;
 
-            panel.$.meshOptimizerVCheckbox.value = panel.getDefault(panel.meta.userData.meshOptimizerOptions, true, 'v');
+            panel.$.meshOptimizerVCheckbox.value = panel.getDefault(panel.meta.userData.meshOptimizerOptions, USERDATA_DEFAULT_VALUE.v, 'v');
 
             panel.updateMeshOptimizerInvalid(panel.$.meshOptimizerVCheckbox, 'v');
             panel.updateReadonly(panel.$.meshOptimizerVCheckbox);
@@ -335,8 +344,11 @@ exports.methods = {
     },
     setMeshOptimizerOptions(prop, event) {
         this.metaList.forEach((meta) => {
-            if (!meta.userData.meshOptimizerOptions) {
-                meta.userData.meshOptimizerOptions = {};
+            meta.userData.meshOptimizerOptions = meta.userData.meshOptimizerOptions || {};
+            for (const key in USERDATA_DEFAULT_VALUE) {
+                if (!Object.hasOwnProperty.call(meta.userData.meshOptimizerOptions, key)) {
+                    meta.userData.meshOptimizerOptions[key] = USERDATA_DEFAULT_VALUE[key];
+                }
             }
 
             meta.userData.meshOptimizerOptions[prop] = event.target.value;
@@ -351,6 +363,11 @@ exports.methods = {
             }
             if (meta.userData.meshOptimizerOptions && this.meta.userData.meshOptimizerOptions) {
                 return meta.userData.meshOptimizerOptions[prop] !== this.meta.userData.meshOptimizerOptions[prop];
+            }
+            if (meta.userData.meshOptimizerOptions && meta.userData.meshOptimizerOptions[prop] === USERDATA_DEFAULT_VALUE[prop]) {
+                return false;
+            } else if (this.meta.userData.meshOptimizerOptions && this.meta.userData.meshOptimizerOptions[prop] === USERDATA_DEFAULT_VALUE[prop]) {
+                return false;
             }
             return true;
         });
